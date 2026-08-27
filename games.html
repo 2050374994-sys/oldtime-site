@@ -630,8 +630,8 @@
         dodgeAttempts++;
         
         const resultEl = document.getElementById('dodgeResult');
-        if (dodgeAttempts >= 10 && resultEl) {
-            resultEl.innerText = '你追了它10次，它不跑了，你赢了。';
+        if (dodgeAttempts >= 50 && resultEl) {
+            resultEl.innerText = '你追了它50次，它不跑了，你赢了。';
             btn.style.transform = 'translate(0, 0)';
         }
     }
