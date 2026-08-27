@@ -26,7 +26,6 @@
             line-height: 1.6;
         }
         
-        /* ========== 页面容器 ========== */
         .page-container {
             width: 100%;
             max-width: 820px;
@@ -45,7 +44,6 @@
             background-color: #FFFF00;
         }
         
-        /* ========== 窗口 - 立体感 ========== */
         .window {
             width: 100%;
             background: #c0c0c0;
@@ -204,6 +202,26 @@
             transition: all 0.1s;
         }
         
+        /* ========== 底部区块 ========== */
+        .bottom-box {
+            background: #fff;
+            border: 2px inset #c0c0c0;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        .bottom-box h4 {
+            margin: 0 0 6px 0;
+            font-size: 12px;
+            color: #000080;
+            border-bottom: 1px dashed #c0c0c0;
+            padding-bottom: 3px;
+        }
+        .bottom-box ul {
+            padding-left: 18px;
+            margin: 0;
+        }
+        
         /* ========== 状态栏 ========== */
         .status-bar {
             background: #c0c0c0;
@@ -217,14 +235,6 @@
             justify-content: space-between;
             margin-top: 3px;
             line-height: 1.4;
-        }
-        
-        /* ========== 特效 ========== */
-        .blink { animation: blink 0.8s infinite; }
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0; }
-            100% { opacity: 1; }
         }
         
         /* ========== 分隔线 ========== */
@@ -313,24 +323,52 @@
             <p><b>🎯 选择一个游戏开始浪费人生：</b></p>
             
             <!-- 游戏1 -->
-            <button class="game-btn" onclick="toggleGame('clickGame', this)">🖱️ 点多少次 — 手指抽筋挑战</button>
+            <button class="game-btn" onclick="toggleGame('clickGame')">🖱️ 点多少次 — 手指抽筋挑战</button>
             <div class="game-window-container" id="container_clickGame"></div>
             
             <!-- 游戏2 -->
-            <button class="game-btn" onclick="toggleGame('drawGame', this)">🎋 抽签 — 今日运气，点了才知道</button>
+            <button class="game-btn" onclick="toggleGame('drawGame')">🎋 抽签 — 今日运气，点了才知道</button>
             <div class="game-window-container" id="container_drawGame"></div>
             
             <!-- 游戏3 -->
-            <button class="game-btn" onclick="toggleGame('guessGame', this)">🔢 猜数字 — 猜不中很正常</button>
+            <button class="game-btn" onclick="toggleGame('guessGame')">🔢 猜数字 — 猜不中很正常</button>
             <div class="game-window-container" id="container_guessGame"></div>
             
             <!-- 游戏4 -->
-            <button class="game-btn" onclick="toggleGame('dodgeGame', this)">🚫 躲避弹窗 — 它比你灵活</button>
+            <button class="game-btn" onclick="toggleGame('dodgeGame')">⚠️ 躲避弹窗 — 它比你灵活</button>
             <div class="game-window-container" id="container_dodgeGame"></div>
             
             <!-- 游戏5 -->
-            <button class="game-btn" onclick="toggleGame('luckGame', this)">🎰 测手气 — 中了奖也白中</button>
+            <button class="game-btn" onclick="toggleGame('luckGame')">🎰 测手气 — 中了奖也白中</button>
             <div class="game-window-container" id="container_luckGame"></div>
+            
+            <!-- 不要点按钮 -->
+            <button class="game-btn" onclick="easterEgg()">🚫 不要点</button>
+            
+            <hr>
+            
+            <!-- 访客游戏记录 -->
+            <div class="bottom-box">
+                <h4>📊 访客游戏记录</h4>
+                <ul>
+                    <li>今天有 5 个人在这里浪费了人生</li>
+                    <li>其中 3 个人点完就跑了</li>
+                    <li>1 个人把躲避弹窗玩急眼了</li>
+                    <li>1 个人还在猜数字</li>
+                </ul>
+            </div>
+            
+            <!-- 游戏评论 -->
+            <div class="bottom-box">
+                <h4>💬 游戏评论</h4>
+                <ul>
+                    <li>匿名：点多少次这游戏，我点完手指抽筋，现在用脚打字。</li>
+                    <li>路人丙：玩完这些游戏，我发现我的人生确实需要浪费。</li>
+                    <li>神秘人：我抽签抽到"中吉"，然后电脑就蓝屏了，这签不准。</li>
+                    <li>匿名2：这游戏页面加载比游戏本身好玩。</li>
+                    <li>路人戊：抽签说今天不宜上网，但我已经上了，还能怎么办。</li>
+                </ul>
+            </div>
             
         </div>
         <div class="status-bar">
@@ -356,21 +394,33 @@
         btn.closest('.window').style.display = 'none';
     }
     
+    // ========== 不要点按钮 ==========
+    let eggCount = 0;
+    function easterEgg() {
+        eggCount++;
+        if (eggCount === 1) {
+            alert('你果然点了。');
+        } else if (eggCount === 2) {
+            alert('你是不是很闲。');
+        } else if (eggCount === 3) {
+            alert('好吧，给你一个彩蛋：🥚');
+        } else {
+            alert('彩蛋没了，别点了。');
+        }
+    }
+    
     // ========== 游戏窗口切换 ==========
-    function toggleGame(gameId, btn) {
+    function toggleGame(gameId) {
         const container = document.getElementById('container_' + gameId);
         
-        // 如果当前游戏窗口已打开，关闭它
         if (container.children.length > 0) {
             container.innerHTML = '';
             return;
         }
         
-        // 关闭所有其他游戏窗口
         const allContainers = document.querySelectorAll('.game-window-container');
         allContainers.forEach(c => c.innerHTML = '');
         
-        // 打开选中的游戏
         let title = '';
         let content = '';
         
@@ -463,7 +513,6 @@
         
         container.appendChild(gameWindow);
         
-        // 初始化游戏状态
         if (gameId === 'clickGame') {
             clickCount = 0;
             clickTimeLeft = 10;
@@ -479,10 +528,8 @@
         }
     }
     
-    // ========== 关闭游戏窗口 ==========
     function closeGame(gameId) {
-        const container = document.getElementById('container_' + gameId);
-        container.innerHTML = '';
+        document.getElementById('container_' + gameId).innerHTML = '';
     }
     
     // ========== 游戏1：点多少次 ==========
