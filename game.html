@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="旧时光小站 - 小游戏专区">
+    <title>🕹️ 小游戏 - 旧时光小站</title>
+    <style>
+        /* ========== 全局 ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #3a6ea5;
+            font-family: "宋体", "SimSun", "Courier New", monospace;
+            font-size: 12px;
+            color: #222;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px 10px;
+            line-height: 1.6;
+        }
+        
+        /* ========== 页面容器 ========== */
+        .page-container {
+            width: 100%;
+            max-width: 820px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        a {
+            color: #0000EE;
+            text-decoration: underline;
+        }
+        a:visited { color: #551A8B; }
+        a:hover {
+            color: #FF0000;
+            background-color: #FFFF00;
+        }
+        
+        /* ========== 窗口 - 立体感 ========== */
+        .window {
+            width: 100%;
+            background: #c0c0c0;
+            border-top: 3px solid #ffffff;
+            border-left: 3px solid #ffffff;
+            border-right: 3px solid #404040;
+            border-bottom: 3px solid #404040;
+            padding: 2px;
+            margin: 12px 0;
+            box-shadow: 
+                4px 4px 8px rgba(0,0,0,0.4),
+                inset 1px 1px 0 #dfdfdf,
+                inset -1px -1px 0 #808080;
+            position: relative;
+        }
+        
+        .win-title {
+            background: linear-gradient(90deg, #000080, #1084d0);
+            color: white;
+            padding: 0 7px;
+            font-weight: bold;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            letter-spacing: 0.5px;
+            height: 20px;
+        }
+        
+        .win-controls {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .win-btn {
+            width: 16px;
+            height: 14px;
+            background: #c0c0c0;
+            border-top: 1px solid #ffffff;
+            border-left: 1px solid #ffffff;
+            border-right: 1px solid #404040;
+            border-bottom: 1px solid #404040;
+            font-size: 9px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #000;
+            font-family: Arial, sans-serif;
+            user-select: none;
+            line-height: 1;
+        }
+        .win-btn:hover { background: #d4d4d4; }
+        .win-btn:active {
+            border-top: 1px solid #404040;
+            border-left: 1px solid #404040;
+            border-right: 1px solid #ffffff;
+            border-bottom: 1px solid #ffffff;
+        }
+        
+        .win-body {
+            padding: 12px;
+            background: #d4d0c8;
+            border-top: 2px solid #808080;
+            border-left: 2px solid #808080;
+            border-right: 2px solid #ffffff;
+            border-bottom: 2px solid #ffffff;
+        }
+        
+        /* ========== 导航栏 ========== */
+        .nav-bar {
+            text-align: center;
+            background: #fff;
+            border: 2px outset #c0c0c0;
+            padding: 6px;
+            margin-bottom: 12px;
+            font-size: 12px;
+        }
+        .nav-bar a {
+            margin: 0 5px;
+            font-weight: bold;
+        }
+        
+        /* ========== 游戏入口按钮 ========== */
+        .game-btn {
+            width: 100%;
+            background: #c0c0c0;
+            border-top: 2px solid #ffffff;
+            border-left: 2px solid #ffffff;
+            border-right: 2px solid #404040;
+            border-bottom: 2px solid #404040;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: "宋体", "SimSun", monospace;
+            margin-bottom: 8px;
+            text-align: left;
+            display: block;
+        }
+        .game-btn:hover {
+            background: #d4d4d4;
+        }
+        .game-btn:active {
+            border-top: 2px solid #404040;
+            border-left: 2px solid #404040;
+            border-right: 2px solid #ffffff;
+            border-bottom: 2px solid #ffffff;
+        }
+        
+        /* ========== 游戏窗口容器 ========== */
+        .game-window-container {
+            margin: 8px 0 12px 20px;
+        }
+        
+        /* ========== 游戏内容 ========== */
+        .game-area {
+            background: #fff;
+            border: 2px inset #c0c0c0;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        .game-area button {
+            background: #c0c0c0;
+            border-top: 2px solid #ffffff;
+            border-left: 2px solid #ffffff;
+            border-right: 2px solid #404040;
+            border-bottom: 2px solid #404040;
+            padding: 5px 16px;
+            cursor: pointer;
+            font-family: "宋体", "SimSun", monospace;
+            font-size: 13px;
+        }
+        .game-area button:active {
+            border-top: 2px solid #404040;
+            border-left: 2px solid #404040;
+            border-right: 2px solid #ffffff;
+            border-bottom: 2px solid #ffffff;
+        }
+        
+        .game-area input {
+            background: #fff;
+            border: 2px inset #c0c0c0;
+            padding: 4px 8px;
+            font-family: "宋体", "SimSun", monospace;
+            font-size: 13px;
+        }
+        
+        /* ========== 躲避弹窗 ========== */
+        #runawayBtn {
+            position: relative;
+            transition: all 0.1s;
+        }
+        
+        /* ========== 状态栏 ========== */
+        .status-bar {
+            background: #c0c0c0;
+            border-top: 2px solid #ffffff;
+            border-left: 2px solid #ffffff;
+            border-right: 2px solid #404040;
+            border-bottom: 2px solid #404040;
+            padding: 1px 8px;
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3px;
+            line-height: 1.4;
+        }
+        
+        /* ========== 特效 ========== */
+        .blink { animation: blink 0.8s infinite; }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        /* ========== 分隔线 ========== */
+        hr {
+            border: none;
+            border-top: 1px solid #808080;
+            border-bottom: 1px solid #ffffff;
+            height: 0;
+            margin: 12px 0;
+        }
+        
+        /* ========== 滚动条 ========== */
+        ::-webkit-scrollbar { width: 16px; }
+        ::-webkit-scrollbar-track { background: #c0c0c0; }
+        ::-webkit-scrollbar-thumb {
+            background: #c0c0c0;
+            border-top: 1px solid #ffffff;
+            border-left: 1px solid #ffffff;
+            border-right: 1px solid #404040;
+            border-bottom: 1px solid #404040;
+        }
+        
+        /* ========== 底部 ========== */
+        .footer {
+            width: 100%;
+            text-align: center;
+            font-size: 11px;
+            color: #eee;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px #000;
+        }
+        .footer a {
+            color: #ffff00;
+        }
+        
+        /* ========== 响应式 ========== */
+        @media (max-width: 600px) {
+            body { padding: 8px; }
+            .win-body { padding: 8px; }
+            .nav-bar a {
+                display: inline-block;
+                margin: 3px;
+            }
+            .game-window-container {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-container">
+
+    <!-- ========== 主窗口 ========== -->
+    <div class="window">
+        <div class="win-title">
+            <span>🕹️ 小游戏 - games.htm</span>
+            <span class="win-controls">
+                <span class="win-btn" onclick="closeWindow(this)" title="关闭">×</span>
+            </span>
+        </div>
+        <div class="win-body">
+            
+            <center>
+                <marquee scrollamount="4" width="95%">
+                    🎮 欢迎来到小游戏专区 🎮 玩不赢没关系，反正也没奖品 🎮
+                </marquee>
+            </center>
+            
+            <hr>
+            
+            <!-- 导航栏 -->
+            <div class="nav-bar">
+                <a href="index.html">🏠 首页</a> |
+                <a href="games.html">🕹️ 小游戏</a> |
+                <a href="tests.html">🧠 无聊测试</a> |
+                <a href="vote.html">🗳️ 随便投票</a> |
+                <a href="collection.html">📼 怪东西收藏</a> |
+                <a href="bullshit.html">📝 废话生成器</a> |
+                <a href="about.html">👤 关于站长</a> |
+                <a href="links.html">🔗 友情链接</a>
+            </div>
+            
+            <hr>
+            
+            <p><b>🎯 选择一个游戏开始浪费人生：</b></p>
+            
+            <!-- 游戏1 -->
+            <button class="game-btn" onclick="toggleGame('clickGame', this)">🖱️ 点多少次 — 手指抽筋挑战</button>
+            <div class="game-window-container" id="container_clickGame"></div>
+            
+            <!-- 游戏2 -->
+            <button class="game-btn" onclick="toggleGame('drawGame', this)">🎋 抽签 — 今日运气，点了才知道</button>
+            <div class="game-window-container" id="container_drawGame"></div>
+            
+            <!-- 游戏3 -->
+            <button class="game-btn" onclick="toggleGame('guessGame', this)">🔢 猜数字 — 猜不中很正常</button>
+            <div class="game-window-container" id="container_guessGame"></div>
+            
+            <!-- 游戏4 -->
+            <button class="game-btn" onclick="toggleGame('dodgeGame', this)">🚫 躲避弹窗 — 它比你灵活</button>
+            <div class="game-window-container" id="container_dodgeGame"></div>
+            
+            <!-- 游戏5 -->
+            <button class="game-btn" onclick="toggleGame('luckGame', this)">🎰 测手气 — 中了奖也白中</button>
+            <div class="game-window-container" id="container_luckGame"></div>
+            
+        </div>
+        <div class="status-bar">
+            <span>🖥️ 就绪</span>
+            <span>📶 连接速度：56Kbps</span>
+            <span>🎮 小游戏专区</span>
+        </div>
+    </div>
+
+    <!-- ========== 底部 ========== -->
+    <div class="footer">
+        <p>
+            © 2002 旧时光小站 All Rights Reserved<br>
+            <a href="index.html">← 返回首页</a>
+        </p>
+    </div>
+
+</div>
+
+<script>
+    // ========== 关闭主窗口 ==========
+    function closeWindow(btn) {
+        btn.closest('.window').style.display = 'none';
+    }
+    
+    // ========== 游戏窗口切换 ==========
+    function toggleGame(gameId, btn) {
+        const container = document.getElementById('container_' + gameId);
+        
+        // 如果当前游戏窗口已打开，关闭它
+        if (container.children.length > 0) {
+            container.innerHTML = '';
+            return;
+        }
+        
+        // 关闭所有其他游戏窗口
+        const allContainers = document.querySelectorAll('.game-window-container');
+        allContainers.forEach(c => c.innerHTML = '');
+        
+        // 打开选中的游戏
+        let title = '';
+        let content = '';
+        
+        switch(gameId) {
+            case 'clickGame':
+                title = '🖱️ 点多少次 — 手指抽筋挑战';
+                content = `
+                    <div class="game-area">
+                        <p>在 10 秒内疯狂点击按钮，看看你能点多少次。</p>
+                        <p style="font-size:11px;color:#666;">温馨提示：手指抽筋本站不负责</p>
+                        <br>
+                        <button id="clickBtn" onclick="countClick()">点我！</button>
+                        <br><br>
+                        <p>已点击：<span id="clickCount">0</span> 次</p>
+                        <p>剩余时间：<span id="clickTime">10</span> 秒</p>
+                        <p id="clickResult" style="font-weight:bold;color:#000080;"></p>
+                    </div>
+                `;
+                break;
+                
+            case 'drawGame':
+                title = '🎋 抽签 — 今日运气，点了才知道';
+                content = `
+                    <div class="game-area">
+                        <p>点击抽签，看看今天的运势。</p>
+                        <br>
+                        <button onclick="drawLuck()">抽签</button>
+                        <br><br>
+                        <p id="drawResult" style="font-weight:bold;font-size:14px;color:#000080;">点击抽签查看结果</p>
+                    </div>
+                `;
+                break;
+                
+            case 'guessGame':
+                title = '🔢 猜数字 — 猜不中很正常';
+                content = `
+                    <div class="game-area">
+                        <p>我心里想了一个 1-10 的数字，你猜猜看。</p>
+                        <br>
+                        <input type="number" id="guessInput" min="1" max="10" placeholder="输入1-10">
+                        <button onclick="guessNumber()">猜</button>
+                        <br><br>
+                        <p id="guessResult"></p>
+                    </div>
+                `;
+                break;
+                
+            case 'dodgeGame':
+                title = '🚫 躲避弹窗 — 它比你灵活';
+                content = `
+                    <div class="game-area">
+                        <p>试着点击下面这个按钮。</p>
+                        <p style="font-size:11px;color:#666;">它会跑。</p>
+                        <br>
+                        <button id="runawayBtn" onmouseover="runAway()" onclick="catchIt()">来点我啊</button>
+                        <br><br>
+                        <p id="dodgeResult"></p>
+                    </div>
+                `;
+                break;
+                
+            case 'luckGame':
+                title = '🎰 测手气 — 中了奖也白中';
+                content = `
+                    <div class="game-area">
+                        <p>点击测试你的手气。</p>
+                        <br>
+                        <button onclick="testLuck()">测手气</button>
+                        <br><br>
+                        <p id="luckResult" style="font-weight:bold;color:#000080;">点击测试</p>
+                    </div>
+                `;
+                break;
+        }
+        
+        const gameWindow = document.createElement('div');
+        gameWindow.className = 'window';
+        gameWindow.style.margin = '8px 0';
+        gameWindow.innerHTML = `
+            <div class="win-title">
+                <span>${title}</span>
+                <span class="win-controls">
+                    <span class="win-btn" onclick="closeGame('${gameId}')" title="关闭">×</span>
+                </span>
+            </div>
+            <div class="win-body">
+                ${content}
+            </div>
+        `;
+        
+        container.appendChild(gameWindow);
+        
+        // 初始化游戏状态
+        if (gameId === 'clickGame') {
+            clickCount = 0;
+            clickTimeLeft = 10;
+            clickStarted = false;
+            if (clickTimer) clearInterval(clickTimer);
+        }
+        if (gameId === 'guessGame') {
+            secretNumber = Math.floor(Math.random() * 10) + 1;
+            guessTimes = 0;
+        }
+        if (gameId === 'dodgeGame') {
+            dodgeAttempts = 0;
+        }
+    }
+    
+    // ========== 关闭游戏窗口 ==========
+    function closeGame(gameId) {
+        const container = document.getElementById('container_' + gameId);
+        container.innerHTML = '';
+    }
+    
+    // ========== 游戏1：点多少次 ==========
+    let clickCount = 0;
+    let clickTimer = null;
+    let clickTimeLeft = 10;
+    let clickStarted = false;
+    
+    function countClick() {
+        if (!clickStarted) {
+            clickStarted = true;
+            clickTimer = setInterval(() => {
+                clickTimeLeft--;
+                const timeEl = document.getElementById('clickTime');
+                if (timeEl) timeEl.innerText = clickTimeLeft;
+                if (clickTimeLeft <= 0) {
+                    clearInterval(clickTimer);
+                    const btn = document.getElementById('clickBtn');
+                    if (btn) btn.disabled = true;
+                    let result = '';
+                    if (clickCount >= 100) {
+                        result = '你手指是租来的吗？点这么快！';
+                    } else if (clickCount >= 60) {
+                        result = '不错，你的手指还活着。';
+                    } else if (clickCount >= 30) {
+                        result = '一般般，建议多锻炼手指。';
+                    } else {
+                        result = '你是在用脚点吗？';
+                    }
+                    const resultEl = document.getElementById('clickResult');
+                    if (resultEl) resultEl.innerText = '游戏结束！' + result;
+                }
+            }, 1000);
+        }
+        clickCount++;
+        const countEl = document.getElementById('clickCount');
+        if (countEl) countEl.innerText = clickCount;
+    }
+    
+    // ========== 游戏2：抽签 ==========
+    const lucks = [
+        '大吉：今天适合上网，不适合出门。',
+        '中吉：网速会很快，但你会不知道干什么。',
+        '小吉：可以点个广告，但别信。',
+        '末吉：今天最好别下载东西。',
+        '凶：你的电脑可能会卡，别怪它。',
+        '大凶：拔网线吧，今天不适合上网。'
+    ];
+    
+    function drawLuck() {
+        const result = lucks[Math.floor(Math.random() * lucks.length)];
+        const resultEl = document.getElementById('drawResult');
+        if (resultEl) resultEl.innerText = result;
+    }
+    
+    // ========== 游戏3：猜数字 ==========
+    let secretNumber = Math.floor(Math.random() * 10) + 1;
+    let guessTimes = 0;
+    
+    function guessNumber() {
+        const input = document.getElementById('guessInput');
+        const resultEl = document.getElementById('guessResult');
+        if (!input || !resultEl) return;
+        
+        const guess = parseInt(input.value);
+        
+        if (!guess || guess < 1 || guess > 10) {
+            resultEl.innerText = '请输入 1-10 的数字！';
+            return;
+        }
+        
+        guessTimes++;
+        
+        if (guess === secretNumber) {
+            resultEl.innerHTML = `你猜了 ${guessTimes} 次才猜对。<br>数字就是 ${secretNumber}。<br><b>算你厉害。</b>`;
+            secretNumber = Math.floor(Math.random() * 10) + 1;
+            guessTimes = 0;
+            input.value = '';
+        } else if (guess > secretNumber) {
+            resultEl.innerText = '大了，再猜。';
+        } else {
+            resultEl.innerText = '小了，再猜。';
+        }
+    }
+    
+    // ========== 游戏4：躲避弹窗 ==========
+    let dodgeAttempts = 0;
+    
+    function runAway() {
+        const btn = document.getElementById('runawayBtn');
+        if (!btn) return;
+        
+        const maxX = 150;
+        const maxY = 80;
+        const randomX = Math.floor(Math.random() * maxX) - maxX/2;
+        const randomY = Math.floor(Math.random() * maxY) - maxY/2;
+        btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        dodgeAttempts++;
+        
+        const resultEl = document.getElementById('dodgeResult');
+        if (dodgeAttempts >= 10 && resultEl) {
+            resultEl.innerText = '你追了它10次，它不跑了，你赢了。';
+            btn.style.transform = 'translate(0, 0)';
+        }
+    }
+    
+    function catchIt() {
+        const resultEl = document.getElementById('dodgeResult');
+        if (resultEl) resultEl.innerText = '恭喜你点到它了！它很惊讶。';
+        const btn = document.getElementById('runawayBtn');
+        if (btn) btn.style.transform = 'translate(0, 0)';
+    }
+    
+    // ========== 游戏5：测手气 ==========
+    const luckResults = [
+        '恭喜你中了一等奖！奖品：空气一袋。',
+        '二等奖！奖品：本站的祝福。',
+        '三等奖！奖品：下次再来。',
+        '没中。很正常。',
+        '你中了"再来一次"，但我不给。',
+        '奖品是：一个弹窗。（已自动关闭）',
+        '中奖了！奖品是：看站长一眼。（站长不在）',
+        '没中。但你的手气比站长好。'
+    ];
+    
+    function testLuck() {
+        const result = luckResults[Math.floor(Math.random() * luckResults.length)];
+        const resultEl = document.getElementById('luckResult');
+        if (resultEl) resultEl.innerText = result;
+    }
+</script>
+</body>
+</html>
