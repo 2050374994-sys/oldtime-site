@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="一个普通的复古网站，非常普通">
+    <title>旧时光小站</title>
+    <style>
+        /* ========== 全局 ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #3a6ea5;
+            font-family: "宋体", "SimSun", "Courier New", monospace;
+            font-size: 12px;
+            color: #222;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px 10px;
+            line-height: 1.6;
+        }
+        
+        /* ========== 页面容器 ========== */
+        .page-container {
+            width: 100%;
+            max-width: 820px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        a {
+            color: #0000EE;
+            text-decoration: underline;
+        }
+        a:visited { color: #551A8B; }
+        a:hover {
+            color: #FF0000;
+            background-color: #FFFF00;
+        }
+        
+        /* ========== 窗口 - 立体感 ========== */
+        .window {
+            width: 100%;
+            background: #c0c0c0;
+            border-top: 3px solid #ffffff;
+            border-left: 3px solid #ffffff;
+            border-right: 3px solid #404040;
+            border-bottom: 3px solid #404040;
+            padding: 2px;
+            margin: 12px 0;
+            box-shadow: 
+                4px 4px 8px rgba(0,0,0,0.4),
+                inset 1px 1px 0 #dfdfdf,
+                inset -1px -1px 0 #808080;
+            position: relative;
+        }
+        
+        .win-title {
+            background: linear-gradient(90deg, #000080, #1084d0);
+            color: white;
+            padding: 0 7px;
+            font-weight: bold;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            letter-spacing: 0.5px;
+            height: 20px;
+        }
+        
+        .win-controls {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .win-btn {
+            width: 16px;
+            height: 14px;
+            background: #c0c0c0;
+            border-top: 1px solid #ffffff;
+            border-left: 1px solid #ffffff;
+            border-right: 1px solid #404040;
+            border-bottom: 1px solid #404040;
+            font-size: 9px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #000;
+            font-family: Arial, sans-serif;
+            user-select: none;
+            line-height: 1;
+        }
+        .win-btn:hover { background: #d4d4d4; }
+        .win-btn:active {
+            border-top: 1px solid #404040;
+            border-left: 1px solid #404040;
+            border-right: 1px solid #ffffff;
+            border-bottom: 1px solid #ffffff;
+        }
+        
+        .win-body {
+            padding: 12px;
+            background: #d4d0c8;
+            border-top: 2px solid #808080;
+            border-left: 2px solid #808080;
+            border-right: 2px solid #ffffff;
+            border-bottom: 2px solid #ffffff;
+        }
+        
+        /* ========== 主窗口内部两栏 ========== */
+        .main-layout {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+        
+        .main-left {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .main-right {
+            width: 240px;
+            flex-shrink: 0;
+        }
+        
+        /* ========== 导航区 ========== */
+        .nav-area {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .nav-area-left {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .nav-area-right {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        /* ========== 内部小框 ========== */
+        .inner-box {
+            background: #fff;
+            border: 2px inset #c0c0c0;
+            padding: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .inner-box:last-child {
+            margin-bottom: 0;
+        }
+        
+        .inner-box h4 {
+            margin: 0 0 4px 0;
+            font-size: 12px;
+            color: #000080;
+            border-bottom: 1px dashed #c0c0c0;
+            padding-bottom: 2px;
+        }
+        
+        /* ========== 健康进度条 ========== */
+        .health-bar {
+            background: #c0c0c0;
+            border: 1px solid #808080;
+            height: 12px;
+            position: relative;
+        }
+        .health-fill {
+            background: #00cc00;
+            height: 100%;
+            width: 47%;
+        }
+        
+        /* ========== 状态栏 ========== */
+        .status-bar {
+            background: #c0c0c0;
+            border-top: 2px solid #ffffff;
+            border-left: 2px solid #ffffff;
+            border-right: 2px solid #404040;
+            border-bottom: 2px solid #404040;
+            padding: 1px 8px;
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3px;
+            line-height: 1.4;
+        }
+        
+        /* ========== 特效 ========== */
+        .blink { animation: blink 0.8s infinite; }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        /* ========== 分隔线 ========== */
+        hr {
+            border: none;
+            border-top: 1px solid #808080;
+            border-bottom: 1px solid #ffffff;
+            height: 0;
+            margin: 12px 0;
+        }
+        
+        /* ========== 计数器 ========== */
+        .counter {
+            background: #000;
+            color: #00FF00;
+            font-family: "Courier New", monospace;
+            font-size: 13px;
+            padding: 2px 8px;
+            display: inline-block;
+            letter-spacing: 2px;
+            border: 2px inset #c0c0c0;
+            text-shadow: 0 0 5px #00FF00;
+        }
+        
+        /* ========== 导航列表 ========== */
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .nav-list li {
+            margin: 5px 0;
+        }
+        .nav-list a {
+            font-size: 13px;
+            font-weight: bold;
+        }
+        .nav-list a::before {
+            content: "» ";
+            color: #808080;
+        }
+        
+        /* ========== 今日状态 ========== */
+        .today-status {
+            background: #fff;
+            border: 2px inset #c0c0c0;
+            padding: 8px;
+            font-size: 12px;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        /* ========== 滚动条 ========== */
+        ::-webkit-scrollbar { width: 16px; }
+        ::-webkit-scrollbar-track { background: #c0c0c0; }
+        ::-webkit-scrollbar-thumb {
+            background: #c0c0c0;
+            border-top: 1px solid #ffffff;
+            border-left: 1px solid #ffffff;
+            border-right: 1px solid #404040;
+            border-bottom: 1px solid #404040;
+        }
+        
+        /* ========== 底部 ========== */
+        .footer {
+            width: 100%;
+            text-align: center;
+            font-size: 11px;
+            color: #eee;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px #000;
+        }
+        .footer a {
+            color: #ffff00;
+        }
+        
+        /* ========== 响应式 ========== */
+        @media (max-width: 700px) {
+            .main-layout,
+            .nav-area {
+                flex-direction: column;
+            }
+            .main-right {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            body { padding: 8px; }
+            .win-body { padding: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-container" id="pageContainer">
+
+    <!-- ========== 主窗口 ========== -->
+    <div class="window" id="mainWindow">
+        <div class="win-title">
+            <span>🏠 旧时光小站 - index.htm</span>
+            <span class="win-controls">
+                <span class="win-btn" onclick="shiftWebsite()" title="关闭">×</span>
+            </span>
+        </div>
+        <div class="win-body">
+            
+            <center>
+                <marquee scrollamount="4" width="95%">
+                    ✨ 欢迎光临旧时光小站 ✨ 本站已安全运行 0 天，因为昨天刚修好 ✨
+                </marquee>
+                
+                <p id="typeText" style="min-height:18px; font-size:13px; margin:8px 0;"></p>
+            </center>
+            
+            <hr>
+            
+            <!-- ========== 内部两栏 ========== -->
+            <div class="main-layout">
+                
+                <!-- 左栏 -->
+                <div class="main-left">
+                    
+                    <!-- 导航区：导航 + 公告栏 + 聊天室 -->
+                    <div class="nav-area">
+                        <div class="nav-area-left">
+                            <p><b>📂 站点导航</b></p>
+                            <ul class="nav-list">
+                                <li><a href="games.html">🕹️ 小游戏</a></li>
+                                <li><a href="tests.html">🧠 无聊测试</a></li>
+                                <li><a href="vote.html">🗳️ 随便投票</a></li>
+                                <li><a href="collection.html">📼 怪东西收藏</a></li>
+                                <li><a href="bullshit.html">📝 废话生成器</a></li>
+                                <li><a href="about.html">👤 关于站长</a></li>
+                                <li><a href="links.html">🔗 友情链接</a></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="nav-area-right">
+                            <div class="inner-box">
+                                <h4>📢 公告栏</h4>
+                                <marquee direction="up" scrollamount="1" height="60">
+                                    <p>本站今天还没倒闭</p>
+                                    <p>昨天也没倒闭</p>
+                                    <p>明天不知道，看情况</p>
+                                    <p>站长今天很忙</p>
+                                    <p>忙什么不知道</p>
+                                    <p>新页面制作中</p>
+                                    <p>大概吧</p>
+                                </marquee>
+                            </div>
+                            
+                            <div class="inner-box">
+                                <h4>💬 聊天室</h4>
+                                <p><a href="#" onclick="alert('聊天室已倒闭，\n欢迎下次再来。'); return false;">点击进入聊天室</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <p><b>📊 今日状态</b></p>
+                    <div class="today-status">
+                        <p>今日心情：还行，没死机</p>
+                        <p>今日访客：比昨天多一个</p>
+                        <p>今日天气：没看，随便猜的</p>
+                        <p>站长状态：在线，但不想说话</p>
+                    </div>
+                    
+                    <hr>
+                    
+                    <p><b>💬 访客留言精选</b></p>
+                    <div class="today-status">
+                        <p>路人甲：这里很温暖，像我家老电脑。</p>
+                        <p>匿名：我进来了，我又出去了，我又进来了。</p>
+                        <p>风之少年：站长，你网站是不是歪了？</p>
+                        <p>游客9527：加载了五分钟，就为了留这句言。</p>
+                    </div>
+                </div>
+                
+                <!-- 右栏：推荐 + 提示 + 统计 + 废话 + 健康 -->
+                <div class="main-right">
+                    <div class="inner-box">
+                        <h4>⭐ 今日推荐</h4>
+                        <p>推荐你去看 <a href="bullshit.html">废话生成器</a>，真的很没用。</p>
+                        <p>或者去 <a href="tests.html">无聊测试</a> 里浪费两分钟。</p>
+                    </div>
+                    
+                    <div class="inner-box">
+                        <h4>⚠️ 友情提示</h4>
+                        <p>不要点右上角的 ×。</p>
+                        <p>我知道你很想点，但真的不要。</p>
+                        <p style="font-size:11px;color:#666;">（点了也不会怎么样，大概）</p>
+                    </div>
+                    
+                    <div class="inner-box">
+                        <h4>📈 访问统计</h4>
+                        <p>今日访问：13 人</p>
+                        <p>昨日访问：12 人</p>
+                        <p>历史最高：还是 12 人</p>
+                    </div>
+                    
+                    <div class="inner-box">
+                        <h4>💬 今日废话</h4>
+                        <p id="dailyNonsense">加载中...</p>
+                    </div>
+                    
+                    <div class="inner-box">
+                        <h4>🩺 网站健康状态</h4>
+                        <p>健康度：47%</p>
+                        <div class="health-bar">
+                            <div class="health-fill"></div>
+                        </div>
+                        <p style="font-size:11px;color:#666;">还在喘气，暂时死不了</p>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <hr>
+            
+            <p style="font-size:11px;color:#444;">
+                ⚠ 本站建议使用 IE 5.0 以上浏览器<br>
+                ⚠ 800×600 分辨率浏览效果最佳
+            </p>
+            
+            <p style="font-size:12px;color:#444; text-align:center;">
+                今日运势：<span id="fortune">宜上网，忌点 ×</span>
+            </p>
+            
+            <div style="text-align:right; margin-top:-5px;">
+                <span class="counter" id="visitorCount">0048271</span>
+                <br>
+                <span style="font-size:11px;color:#444;">您是第 48271 位光临本站的朋友</span>
+            </div>
+            
+        </div>
+        <div class="status-bar">
+            <span>🖥️ 就绪</span>
+            <span>📶 连接速度：56Kbps</span>
+            <span id="clock">2002-04-20 15:30:00</span>
+        </div>
+    </div>
+
+    <!-- ========== 底部 ========== -->
+    <div class="footer">
+        <p>
+            © 2002 旧时光小站 All Rights Reserved<br>
+            本站由 Windows 98 + 记事本 手工编写<br>
+            站长邮箱：<a href="mailto:webmaster@oldtime.com">webmaster@oldtime.com</a>
+        </p>
+    </div>
+
+</div>
+
+<script>
+    // ========== 打字机 ==========
+    const text = "欢迎来到本站，祝你点击愉快，不要迷路。";
+    let i = 0;
+    function type() {
+        if (i < text.length) {
+            document.getElementById("typeText").innerText += text.charAt(i);
+            i++;
+            setTimeout(type, 80);
+        } else {
+            document.getElementById("typeText").innerHTML += '<span class="blink">▌</span>';
+        }
+    }
+    type();
+    
+    // ========== 时钟 ==========
+    function updateClock() {
+        const now = new Date();
+        const timeStr = '2002-04-20 ' +
+            String(now.getHours()).padStart(2, '0') + ':' +
+            String(now.getMinutes()).padStart(2, '0') + ':' +
+            String(now.getSeconds()).padStart(2, '0');
+        document.getElementById('clock').innerText = timeStr;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+    
+    // ========== 今日运势随机 ==========
+    const fortunes = [
+        '宜上网，忌点 ×',
+        '宜刷新，忌等待',
+        '宜留言，忌潜水',
+        '宜收藏，忌关闭',
+        '宜点链接，忌迷路',
+        '宜下载，忌断线'
+    ];
+    document.getElementById('fortune').innerText = fortunes[Math.floor(Math.random() * fortunes.length)];
+    
+    // ========== 今日废话随机 ==========
+    const nonsense = [
+        '我电脑很快，开机只用了两分钟，骄傲。',
+        '今天网速挺好，打开一个网页只用了三次刷新。',
+        '我学会了删系统文件，电脑现在很安静。',
+        '刚才电脑蓝屏了，我夸它颜色好看，它就好了。',
+        '我把鼠标倒过来用，现在电脑以为我是左撇子。',
+        '今天下载了一个病毒，它跑得比我快。',
+        '我对着电脑说了句"你好"，它弹了个广告出来。',
+        '把桌面图标排成爱心之后，电脑死机了。',
+        '我卸载了IE，结果电脑说它没有浏览器了。',
+        '今天清理了1000个弹窗，还剩1000个。'
+    ];
+    document.getElementById('dailyNonsense').innerText = nonsense[Math.floor(Math.random() * nonsense.length)];
+    
+    // ========== 点击 × 系统错误彩蛋 ==========
+    let closeCount = 0;
+    function shiftWebsite() {
+        closeCount++;
+        
+        if (closeCount === 1) {
+            alert('该程序执行了非法操作，\n即将关闭。');
+        } else if (closeCount === 2) {
+            alert('严重错误：\n站点试图执行无效指令。');
+        } else if (closeCount === 3) {
+            alert('常规保护错误。\n站点将被终止。');
+        } else if (closeCount === 4) {
+            alert('算了不吓你了，\n其实关不掉。');
+        } else {
+            alert('别点了别点了，\n真关不掉。');
+        }
+    }
+</script>
+</body>
+</html>
