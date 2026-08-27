@@ -63,16 +63,16 @@
         .win-title {
             background: linear-gradient(90deg, #000080, #1084d0);
             color: white;
-            padding: 0 7px;
+            padding: 0 10px;
             font-weight: bold;
-            font-size: 12px;
+            font-size: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             user-select: none;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
             letter-spacing: 0.5px;
-            height: 20px;
+            height: 28px;
         }
         
         .win-controls {
@@ -291,7 +291,7 @@
     <!-- ========== 主窗口 ========== -->
     <div class="window">
         <div class="win-title">
-            <span>🕹️ 小游戏 - games.htm</span>
+            <span>🕹️ <span style="color:#ffff00;">小游戏</span> - games.htm</span>
             <span class="win-controls">
                 <span class="win-btn" onclick="closeWindow(this)" title="关闭">×</span>
             </span>
@@ -335,7 +335,7 @@
             <div class="game-window-container" id="container_guessGame"></div>
             
             <!-- 游戏4 -->
-            <button class="game-btn" onclick="toggleGame('dodgeGame')">⚠️ 躲避弹窗 — 它比你灵活</button>
+            <button class="game-btn" onclick="toggleGame('dodgeGame')">🚫 躲避弹窗 — 它比你灵活</button>
             <div class="game-window-container" id="container_dodgeGame"></div>
             
             <!-- 游戏5 -->
@@ -343,7 +343,7 @@
             <div class="game-window-container" id="container_luckGame"></div>
             
             <!-- 不要点按钮 -->
-            <button class="game-btn" onclick="easterEgg()">🚫 不要点</button>
+            <button class="game-btn" onclick="easterEgg()">🚷 不要点</button>
             
             <hr>
             
