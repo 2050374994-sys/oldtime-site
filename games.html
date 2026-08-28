@@ -293,7 +293,7 @@
         <div class="win-title">
             <span>🕹️ <span style="color:#ffff00;">小游戏</span> - games.htm</span>
             <span class="win-controls">
-                <span class="win-btn" onclick="closeWindow(this)" title="关闭">×</span>
+                <span class="win-btn" onclick="location.href='index.html'" title="返回首页">×</span>
             </span>
         </div>
         <div class="win-body">
@@ -389,11 +389,6 @@
 </div>
 
 <script>
-    // ========== 关闭主窗口 ==========
-    function closeWindow(btn) {
-        btn.closest('.window').style.display = 'none';
-    }
-    
     // ========== 不要点按钮 ==========
     let eggCount = 0;
     function easterEgg() {
@@ -469,7 +464,7 @@
                 break;
                 
             case 'dodgeGame':
-                title = '🚫 躲避弹窗 — 它比你灵活';
+                title = '⚠️ 躲避弹窗 — 它比你灵活';
                 content = `
                     <div class="game-area">
                         <p>试着点击下面这个按钮。</p>
