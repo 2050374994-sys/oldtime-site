@@ -198,6 +198,110 @@
             margin: 5px;
         }
         
+        /* ========== 进度条 ========== */
+        .progress-bar {
+            background: #c0c0c0;
+            border: 1px solid #808080;
+            height: 20px;
+            position: relative;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            background: #00cc00;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        /* ========== 花里胡哨广告 ========== */
+        .ad-box {
+            background: linear-gradient(135deg, #ffff00, #ffcc00, #ff9900);
+            border: 3px dashed #ff0000;
+            padding: 20px;
+            text-align: center;
+            margin: 10px 0;
+            position: relative;
+            animation: adPulse 1s infinite;
+        }
+        
+        @keyframes adPulse {
+            0% { border-color: #ff0000; }
+            50% { border-color: #ffff00; }
+            100% { border-color: #ff0000; }
+        }
+        
+        .ad-skip {
+            position: absolute;
+            top: 5px;
+            right: 8px;
+            font-size: 11px;
+            color: #cc0000;
+            cursor: pointer;
+            font-weight: bold;
+            background: #fff;
+            padding: 2px 6px;
+            border: 1px solid #cc0000;
+        }
+        
+        .ad-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff0000;
+            animation: blink 0.5s infinite;
+        }
+        
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        .ad-prize {
+            font-size: 16px;
+            font-weight: bold;
+            color: #000080;
+            margin: 10px 0;
+        }
+        
+        .ad-countdown {
+            font-size: 13px;
+            color: #ff0000;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .ad-claim-btn {
+            background: #ff0000 !important;
+            color: #fff !important;
+            font-size: 16px !important;
+            font-weight: bold !important;
+            padding: 10px 30px !important;
+            animation: blink 0.3s infinite;
+        }
+        
+        .ad-result-btn {
+            background: #808080 !important;
+            color: #ccc !important;
+            font-size: 14px !important;
+            font-weight: bold !important;
+            padding: 8px 25px !important;
+            cursor: not-allowed !important;
+        }
+        
+        .ad-result-btn.active {
+            background: #c0c0c0 !important;
+            color: #000 !important;
+            cursor: pointer !important;
+        }
+        
+        /* ========== 已选提示 ========== */
+        .selected-tip {
+            font-size: 11px;
+            margin-top: 5px;
+            color: #000080;
+            font-weight: bold;
+        }
+        
         /* ========== 底部区块 ========== */
         .bottom-box {
             background: #fff;
@@ -323,12 +427,12 @@
             <div class="test-window-container" id="container_patienceTest"></div>
             
             <!-- 测试2 -->
-            <button class="test-btn" onclick="toggleTest('forumTest')">💬 你在论坛里会是什么角色</button>
-            <div class="test-window-container" id="container_forumTest"></div>
+            <button class="test-btn" onclick="toggleTest('comboTest')">🔗 回答几个问题，告诉你是个怎样的人</button>
+            <div class="test-window-container" id="container_comboTest"></div>
             
             <!-- 测试3 -->
-            <button class="test-btn" onclick="toggleTest('popupTest')">🚨 你被弹窗广告追的时候会往哪跑</button>
-            <div class="test-window-container" id="container_popupTest"></div>
+            <button class="test-btn" onclick="toggleTest('iqTest')">🧠 智商测试（答案需要看广告解锁）</button>
+            <div class="test-window-container" id="container_iqTest"></div>
             
             <!-- 测试4 -->
             <button class="test-btn" onclick="toggleTest('genderTest')">👤 填写你的性别，猜猜你爸妈的性别</button>
@@ -356,8 +460,8 @@
                 <h4>💬 测试评论</h4>
                 <ul>
                     <li>匿名：测完"耐心测试"，我发现我真的没耐心，没测完就走了。</li>
-                    <li>路人乙：论坛角色测试说我是潜水员，我现在都不好意思回这条。</li>
-                    <li>游客666：弹窗测试测完，我看见广告就想跑。</li>
+                    <li>路人乙：组合测试说我是"起床先看手机的人"，准得可怕。</li>
+                    <li>游客666：智商测试我看完了广告，然后它说我不太聪明。</li>
                     <li>路人丁：性别测试太离谱了，但我爸妈的性别猜对了。</li>
                     <li>神秘人：键盘测试说我能压坏3个键盘，我现在不敢坐电脑前了。</li>
                 </ul>
@@ -402,12 +506,15 @@
                 title = '⏳ 你的耐心够不够等一张图加载完';
                 content = `
                     <div class="test-area">
-                        <p>下面有一张"正在加载"的图，你能等多久？</p>
-                        <p style="font-size:11px;color:#666;">点击按钮开始计时，等你不想等了就点"不等了"</p>
+                        <p>下面这张图正在加载，你能等多久？</p>
                         <br>
-                        <p id="patienceStatus">🖼️ 图片加载中... 请稍候...</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="patienceFill"></div>
+                        </div>
+                        <p id="patienceProgressText" style="font-weight:bold;">0%</p>
+                        <p style="font-size:11px;color:#666;">🖼️ 图片加载中... 请稍候...</p>
                         <br>
-                        <button onclick="startPatience()">开始等待</button>
+                        <button onclick="startPatience()">开始加载</button>
                         <button onclick="giveUpPatience()">不等了</button>
                         <br><br>
                         <p id="patienceResult" style="font-weight:bold;color:#000080;"></p>
@@ -415,35 +522,80 @@
                 `;
                 break;
                 
-            case 'forumTest':
-                title = '💬 你在论坛里会是什么角色';
+            case 'comboTest':
+                title = '🔗 回答几个问题，告诉你是个怎样的人';
                 content = `
                     <div class="test-area">
-                        <p>回答几个问题，看看你在论坛里是哪种人。</p>
+                        <p><b>第1题：你早上起床第一件事干什么？</b></p>
+                        <button onclick="comboSelect(1, '起床先看手机', this)">看手机</button>
+                        <button onclick="comboSelect(1, '起床先上厕所', this)">上厕所</button>
+                        <button onclick="comboSelect(1, '起床继续睡', this)">继续睡</button>
+                        <button onclick="comboSelect(1, '起床先发呆', this)">发呆</button>
+                        <p id="comboStatus1" class="selected-tip"></p>
+                        
+                        <p style="margin-top:15px;"><b>第2题：你走路时踩到井盖会？</b></p>
+                        <button onclick="comboSelect(2, '走路绕开井盖', this)">绕开</button>
+                        <button onclick="comboSelect(2, '走路踩上去', this)">踩上去</button>
+                        <button onclick="comboSelect(2, '走路跳过井盖', this)">跳过去</button>
+                        <button onclick="comboSelect(2, '走路没注意过', this)">没注意过</button>
+                        <p id="comboStatus2" class="selected-tip"></p>
+                        
+                        <p style="margin-top:15px;"><b>第3题：你吃薯片时？</b></p>
+                        <button onclick="comboSelect(3, '薯片一片一片吃', this)">一片一片吃</button>
+                        <button onclick="comboSelect(3, '薯片一把一把吃', this)">一把一把吃</button>
+                        <button onclick="comboSelect(3, '薯片倒嘴里', this)">倒嘴里</button>
+                        <button onclick="comboSelect(3, '不吃薯片', this)">不吃薯片</button>
+                        <p id="comboStatus3" class="selected-tip"></p>
+                        
+                        <p style="margin-top:15px;"><b>第4题：你关电脑时？</b></p>
+                        <button onclick="comboSelect(4, '电脑正常关机', this)">正常关机</button>
+                        <button onclick="comboSelect(4, '电脑直接拔电源', this)">直接拔电源</button>
+                        <button onclick="comboSelect(4, '电脑从来不关', this)">不关</button>
+                        <button onclick="comboSelect(4, '电脑强制关机', this)">强制关机</button>
+                        <p id="comboStatus4" class="selected-tip"></p>
+                        
                         <br>
-                        <p>你发帖的频率是？</p>
-                        <button onclick="forumResult('灌水王')">每天发帖</button>
-                        <button onclick="forumResult('潜水员')">只看不发</button>
-                        <button onclick="forumResult('卖片哥')">发小广告</button>
-                        <button onclick="forumResult('管理员')">删别人帖</button>
+                        <button onclick="comboSubmitAll()" style="font-size:14px;font-weight:bold;padding:8px 30px;">提交答案</button>
                         <br><br>
-                        <p id="forumResultText" style="font-weight:bold;color:#000080;"></p>
+                        <p id="comboResult" style="font-weight:bold;color:#000080;"></p>
                     </div>
                 `;
                 break;
                 
-            case 'popupTest':
-                title = '🚨 你被弹窗广告追的时候会往哪跑';
+            case 'iqTest':
+                title = '🧠 智商测试（答案需要看广告解锁）';
                 content = `
-                    <div class="test-area">
-                        <p>想象一下，屏幕上突然弹出一堆广告，你会？</p>
+                    <div class="test-area" id="iqTestArea">
+                        <p><b>第1题：太阳从哪边升起？</b></p>
+                        <button onclick="iqSelect(1, '上面', this)">上面</button>
+                        <button onclick="iqSelect(1, '下面', this)">下面</button>
+                        <button onclick="iqSelect(1, '东边', this)">东边</button>
+                        <button onclick="iqSelect(1, '我还没起床', this)">我还没起床</button>
+                        <p id="iqStatus1" class="selected-tip"></p>
+                        
+                        <p style="margin-top:15px;"><b>第2题：如果电脑突然着火，你会？</b></p>
+                        <button onclick="iqSelect(2, '拔电源', this)">拔电源</button>
+                        <button onclick="iqSelect(2, '泼水', this)">泼水</button>
+                        <button onclick="iqSelect(2, '拍照发朋友圈', this)">拍照发朋友圈</button>
+                        <button onclick="iqSelect(2, '先做完这个测试', this)">先做完这个测试</button>
+                        <p id="iqStatus2" class="selected-tip"></p>
+                        
+                        <p style="margin-top:15px;"><b>第3题：以下哪个是水果？</b></p>
+                        <button onclick="iqSelect(3, '苹果', this)">苹果</button>
+                        <button onclick="iqSelect(3, '鼠标', this)">鼠标</button>
+                        <button onclick="iqSelect(3, '键盘', this)">键盘</button>
+                        <button onclick="iqSelect(3, '充电器', this)">充电器</button>
+                        <p id="iqStatus3" class="selected-tip"></p>
+                        
+                        <p style="margin-top:15px;"><b>第4题：你觉得出题的人聪明吗？</b></p>
+                        <button onclick="iqSelect(4, '聪明', this, true)">聪明</button>
+                        <button onclick="iqSelect(4, '不聪明', this, false)">不聪明</button>
+                        <button onclick="iqSelect(4, '比我还无聊', this, false)">比我还无聊</button>
+                        <button onclick="iqSelect(4, '不知道', this, false)">不知道</button>
+                        <p id="iqStatus4" class="selected-tip"></p>
+                        
                         <br>
-                        <button onclick="popupResult('关掉它')">冷静地关掉</button>
-                        <button onclick="popupResult('拔网线')">直接拔网线</button>
-                        <button onclick="popupResult('关电脑')">立刻关电脑</button>
-                        <button onclick="popupResult('骂它')">对着屏幕骂</button>
-                        <br><br>
-                        <p id="popupResultText" style="font-weight:bold;color:#000080;"></p>
+                        <button onclick="iqSubmitAll()" style="font-size:14px;font-weight:bold;padding:8px 30px;">提交答案</button>
                     </div>
                 `;
                 break;
@@ -495,73 +647,207 @@
         container.appendChild(testWindow);
         
         if (testId === 'patienceTest') {
-            patienceStartTime = null;
+            patienceProgress = 0;
+            if (patienceTimer) clearInterval(patienceTimer);
+        }
+        if (testId === 'comboTest') {
+            comboSelections = {};
+        }
+        if (testId === 'iqTest') {
+            iqSelections = {};
         }
     }
     
     function closeTest(testId) {
         document.getElementById('container_' + testId).innerHTML = '';
+        if (testId === 'patienceTest' && patienceTimer) {
+            clearInterval(patienceTimer);
+            patienceTimer = null;
+        }
+        if (testId === 'iqTest' && adTimer) {
+            clearInterval(adTimer);
+            adTimer = null;
+        }
     }
     
     // ========== 测试1：耐心测试 ==========
-    let patienceStartTime = null;
+    let patienceTimer = null;
+    let patienceProgress = 0;
     
     function startPatience() {
-        patienceStartTime = new Date();
-        document.getElementById('patienceStatus').innerText = '🖼️ 图片加载中... 请稍候...';
-        document.getElementById('patienceResult').innerText = '';
+        const progressFill = document.getElementById('patienceFill');
+        const progressText = document.getElementById('patienceProgressText');
+        const resultEl = document.getElementById('patienceResult');
+        
+        if (patienceTimer) clearInterval(patienceTimer);
+        
+        patienceProgress = 0;
+        progressFill.style.width = '0%';
+        progressText.innerText = '0%';
+        resultEl.innerText = '';
+        
+        patienceTimer = setInterval(() => {
+            if (patienceProgress < 99) {
+                patienceProgress += Math.floor(Math.random() * 3) + 1;
+                if (patienceProgress > 99) patienceProgress = 99;
+                progressFill.style.width = patienceProgress + '%';
+                progressText.innerText = patienceProgress + '%';
+            }
+        }, 500);
     }
     
     function giveUpPatience() {
-        if (!patienceStartTime) {
-            document.getElementById('patienceResult').innerText = '你还没开始等呢。';
+        if (patienceTimer) {
+            clearInterval(patienceTimer);
+            patienceTimer = null;
+        }
+        
+        const resultEl = document.getElementById('patienceResult');
+        
+        if (patienceProgress >= 99) {
+            resultEl.innerText = '它卡在99%了，你也卡在"再等等"和"不等了"之间。';
+        } else if (patienceProgress >= 50) {
+            resultEl.innerText = '你等了这么久，进度才 ' + patienceProgress + '%。你的人生也在加载中。';
+        } else if (patienceProgress > 0) {
+            resultEl.innerText = '才 ' + patienceProgress + '% 你就不行了。你的耐心比这进度条还短。';
+        } else {
+            resultEl.innerText = '你还没开始加载就放弃了。我佩服你的果断。';
+        }
+    }
+    
+    // ========== 测试2：组合测试 ==========
+    let comboSelections = {};
+    
+    function comboSelect(questionNum, answer, btn) {
+        comboSelections[questionNum] = answer;
+        
+        const buttons = btn.parentElement.querySelectorAll('button');
+        buttons.forEach(b => b.style.background = '#c0c0c0');
+        btn.style.background = '#ffff99';
+        
+        document.getElementById('comboStatus' + questionNum).innerText = '✅ 已选：' + answer;
+    }
+    
+    function comboSubmitAll() {
+        if (!comboSelections[1] || !comboSelections[2] || !comboSelections[3] || !comboSelections[4]) {
+            alert('还有题目没做完！');
             return;
         }
-        const elapsed = Math.floor((new Date() - patienceStartTime) / 1000);
-        let result = '';
-        if (elapsed >= 10) {
-            result = `你等了 ${elapsed} 秒，图片还没加载完。你的耐心值得表扬。`;
-        } else if (elapsed >= 5) {
-            result = `你等了 ${elapsed} 秒就不行了。你的耐心一般。`;
-        } else if (elapsed >= 2) {
-            result = `你等了 ${elapsed} 秒。你没什么耐心。`;
-        } else {
-            result = `你只等了 ${elapsed} 秒。你是急性子。`;
+        
+        const resultEl = document.getElementById('comboResult');
+        const answers = [
+            comboSelections[1],
+            comboSelections[2],
+            comboSelections[3],
+            comboSelections[4]
+        ];
+        resultEl.innerText = '你是一个' + answers.join('，') + '的人。';
+    }
+    
+    // ========== 测试3：智商测试 ==========
+    let iqSelections = {};
+    let adTimer = null;
+    let adSecondsLeft = 10;
+    
+    function iqSelect(questionNum, answer, btn, canSelect) {
+        if (questionNum === 4 && canSelect === false) {
+            alert('这个选项坏掉了。');
+            return;
         }
-        document.getElementById('patienceResult').innerText = result;
-        document.getElementById('patienceStatus').innerText = '❌ 图片加载失败（其实根本没有图）';
-        patienceStartTime = null;
+        
+        iqSelections[questionNum] = answer;
+        
+        const buttons = btn.parentElement.querySelectorAll('button');
+        buttons.forEach(b => b.style.background = '#c0c0c0');
+        btn.style.background = '#ffff99';
+        
+        document.getElementById('iqStatus' + questionNum).innerText = '✅ 已选：' + answer;
     }
     
-    // ========== 测试2：论坛角色 ==========
-    function forumResult(role) {
-        const comments = {
-            '灌水王': '你是论坛灌水王。不管什么帖子，你都能回一句"沙发"或"顶"。',
-            '潜水员': '你是潜水员。你看帖从不回帖，但每个帖子都有你的浏览记录。',
-            '卖片哥': '你是卖片哥。你的存在让所有管理员头疼。',
-            '管理员': '你是管理员。你最大的乐趣是删别人的帖。'
-        };
-        document.getElementById('forumResultText').innerText = comments[role];
+    function iqSubmitAll() {
+        if (!iqSelections[1] || !iqSelections[2] || !iqSelections[3] || !iqSelections[4]) {
+            alert('还有题目没做完！');
+            return;
+        }
+        
+        showAd();
     }
     
-    // ========== 测试3：弹窗反应 ==========
-    function popupResult(action) {
-        const comments = {
-            '关掉它': '你选择冷静关掉。很好，你是个成熟的大人。',
-            '拔网线': '你选择拔网线。简单粗暴，但很有效。',
-            '关电脑': '你选择关电脑。弹窗赢不了你，因为你直接不玩了。',
-            '骂它': '你选择骂它。弹窗听不懂，但你的邻居可能听到了。'
-        };
-        document.getElementById('popupResultText').innerText = comments[action];
+    // ========== 广告系统 ==========
+    function showAd() {
+        const area = document.getElementById('iqTestArea');
+        area.innerHTML = `
+            <div class="ad-box">
+                <span class="ad-skip" onclick="trySkip()">跳过广告</span>
+                
+                <p class="ad-title">🔥🔥 恭喜你中奖了！🔥🔥</p>
+                <p class="ad-prize">🎉 你是本站第 99999 位访客！</p>
+                <p class="ad-prize">🎁 奖品：iPhone 15 Pro Max</p>
+                <p style="color:#ff0000;font-weight:bold;">💰 价值 9999 元，免费领取！</p>
+                <p style="color:#000080;font-weight:bold;">⚠ 仅限今天，错过再等一年！</p>
+                <br>
+                <button class="ad-claim-btn" onclick="claimPrize()">立即领取</button>
+                <br><br>
+                <p class="ad-countdown" id="adCountdown">广告剩余：10 秒</p>
+                <button class="ad-result-btn" id="resultBtn" onclick="showResult()" disabled>查看结果</button>
+            </div>
+        `;
+        
+        adSecondsLeft = 10;
+        document.getElementById('adCountdown').innerText = '广告剩余：' + adSecondsLeft + ' 秒';
+        
+        adTimer = setInterval(() => {
+            adSecondsLeft--;
+            if (adSecondsLeft <= 0) {
+                clearInterval(adTimer);
+                const btn = document.getElementById('resultBtn');
+                btn.disabled = false;
+                btn.classList.add('active');
+                document.getElementById('adCountdown').innerText = '✅ 广告结束，可以查看结果了';
+            } else {
+                document.getElementById('adCountdown').innerText = '广告剩余：' + adSecondsLeft + ' 秒';
+            }
+        }, 1000);
+    }
+    
+    function trySkip() {
+        alert('广告还没播完，不能跳过。');
+    }
+    
+    function claimPrize() {
+        const confirmCamera = confirm('是否允许获取您的摄像头权限？');
+        
+        if (confirmCamera) {
+            alert('即将为您办理 9999 元网贷，正在进行人脸识别...\n\n（弹窗可以关闭，广告继续播放）');
+        } else {
+            alert('您已放弃领取奖品，但广告还需继续观看。');
+        }
+    }
+    
+    function showResult() {
+        if (adTimer) {
+            clearInterval(adTimer);
+            adTimer = null;
+        }
+        
+        const area = document.getElementById('iqTestArea');
+        area.innerHTML = `
+            <p style="margin:15px 0;">正在分析你的智商...</p>
+            <p style="margin:15px 0;">分析完成。</p>
+            <p style="font-weight:bold;color:#000080;font-size:14px;margin:15px 0;">
+                为了这种弱智问题看广告，<br>看来你也不太聪明。
+            </p>
+        `;
     }
     
     // ========== 测试4：性别测试 ==========
     function genderResult(gender) {
-        const comments = {
-            '男': '你是男的。你爸是男的，你妈是女的。恭喜你猜对了。',
-            '女': '你是女的。你爸是男的，你妈是女的。恭喜你猜对了。'
-        };
-        document.getElementById('genderResultText').innerText = comments[gender];
+        const resultEl = document.getElementById('genderResultText');
+        if (gender === '男') {
+            resultEl.innerHTML = '你是男的。<br>你爸是男的，你妈是女的。';
+        } else {
+            resultEl.innerHTML = '你是女的。<br>你爸是男的，你妈是女的。';
+        }
     }
     
     // ========== 测试5：键盘测试 ==========
@@ -587,7 +873,7 @@
             keyboards = 10;
         }
         
-        resultEl.innerText = `你 ${weight} 公斤的体重，大概能压坏 ${keyboards} 个键盘。建议离键盘远一点。`;
+        resultEl.innerText = '你 ' + weight + ' 公斤的体重，大概能压坏 ' + keyboards + ' 个键盘。建议离键盘远一点。';
         document.getElementById('weightInput').value = '';
     }
 </script>
