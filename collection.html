@@ -246,12 +246,25 @@
             overflow: hidden;
         }
         
+        /* ========== 双击提示 ========== */
+        .double-click-tip {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 12px;
+            text-shadow: 1px 1px 2px #000;
+            z-index: 2;
+            pointer-events: none;
+        }
+        
         /* ========== 桌面图标 ========== */
         .desktop-icons {
             display: flex;
             flex-direction: column;
             gap: 18px;
-            padding: 20px 0 0 20px;
+            padding: 40px 0 0 20px;
             align-items: flex-start;
             position: relative;
             height: 100%;
@@ -369,6 +382,42 @@
         .start-menu-divider {
             border-top: 1px solid #c0c0c0;
             margin: 3px 0;
+        }
+        
+        /* ========== 软件窗口 ========== */
+        .software-window {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 250px;
+            background: #c0c0c0;
+            border-top: 3px solid #ffffff;
+            border-left: 3px solid #ffffff;
+            border-right: 3px solid #404040;
+            border-bottom: 3px solid #404040;
+            padding: 2px;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.4);
+            z-index: 50;
+            display: none;
+        }
+        .software-window .sw-body {
+            padding: 12px;
+            background: #d4d0c8;
+            text-align: center;
+            font-size: 12px;
+        }
+        .software-window .sw-progress-bg {
+            background: #c0c0c0;
+            border: 1px solid #808080;
+            height: 14px;
+            margin: 8px 0;
+        }
+        .software-window .sw-progress-fill {
+            background: #000080;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
         }
         
         /* ========== 状态栏 ========== */
@@ -517,6 +566,8 @@
     <!-- XP 桌面 -->
     <div class="desktop-image-placeholder" id="desktopScreen">
         <div class="desktop-area">
+            <p class="double-click-tip">💡 双击图标打开软件</p>
+            
             <div class="desktop-icons" id="desktopIcons">
                 <div class="desktop-icon" ondblclick="trySoftware('桌面整理大师 0.1')">
                     <div class="icon-img">🗂️</div>
@@ -533,6 +584,20 @@
                 <div class="desktop-icon" ondblclick="trySoftware('内存清理大师')">
                     <div class="icon-img">🧹</div>
                     <div class="icon-text">内存清理大师</div>
+                </div>
+            </div>
+            
+            <!-- 软件窗口 -->
+            <div class="software-window" id="softwareWindow">
+                <div class="win-title">
+                    <span id="swTitle">软件</span>
+                </div>
+                <div class="sw-body">
+                    <p id="swText">正在运行...</p>
+                    <div class="sw-progress-bg" id="swProgressBg">
+                        <div class="sw-progress-fill" id="swProgress"></div>
+                    </div>
+                    <p id="swPercent" style="font-weight:bold;">0%</p>
                 </div>
             </div>
         </div>
@@ -565,6 +630,7 @@
 <script>
     let bootTimer = null;
     let timeTimer = null;
+    let softwareTimer = null;
     
     // ========== 打开虚拟电脑 ==========
     function openVirtualPC() {
@@ -595,7 +661,12 @@
             clearInterval(timeTimer);
             timeTimer = null;
         }
+        if (softwareTimer) {
+            clearInterval(softwareTimer);
+            softwareTimer = null;
+        }
         document.getElementById('startMenu').classList.remove('active');
+        document.getElementById('softwareWindow').style.display = 'none';
     }
     
     // ========== 重置桌面图标 ==========
@@ -605,6 +676,7 @@
             icon.style.position = '';
             icon.style.left = '';
             icon.style.top = '';
+            icon.style.zIndex = '';
         });
     }
     
@@ -660,14 +732,35 @@
         }
     }
     
+    // ========== 显示软件窗口 ==========
+    function showSoftwareWindow(title, text) {
+        const win = document.getElementById('softwareWindow');
+        document.getElementById('swTitle').innerText = title;
+        document.getElementById('swText').innerHTML = text;
+        document.getElementById('swProgress').style.width = '0%';
+        document.getElementById('swPercent').innerText = '0%';
+        document.getElementById('swProgressBg').style.display = '';
+        document.getElementById('swPercent').style.display = '';
+        win.style.display = 'block';
+    }
+    
+    function updateSoftwareProgress(percent) {
+        document.getElementById('swProgress').style.width = percent + '%';
+        document.getElementById('swPercent').innerText = percent + '%';
+    }
+    
+    function hideSoftwareWindow() {
+        document.getElementById('softwareWindow').style.display = 'none';
+    }
+    
     // ========== 试用软件 ==========
     function trySoftware(name) {
         switch(name) {
             case '桌面整理大师 0.1':
                 const icons = document.querySelectorAll('.desktop-icon');
                 const desktopArea = document.querySelector('.desktop-area');
-                const maxX = desktopArea.clientWidth - 70;
-                const maxY = desktopArea.clientHeight - 70;
+                const maxX = desktopArea.clientWidth - 80;
+                const maxY = desktopArea.clientHeight - 80;
                 
                 icons.forEach(icon => {
                     const randomX = Math.floor(Math.random() * maxX);
@@ -675,29 +768,87 @@
                     icon.style.position = 'absolute';
                     icon.style.left = randomX + 'px';
                     icon.style.top = randomY + 'px';
+                    icon.style.zIndex = Math.floor(Math.random() * 10) + 1;
                 });
-                alert('🗂️ 桌面整理大师 0.1\n\n正在整理桌面...\n\n整理完成！\n\n（图标全乱了）');
                 break;
                 
             case '网速加速器 2002':
-                alert('⚡ 网速加速器 2002\n\n正在加速...\n\n加速完成！\n\n网速已从 56K 提升到 57K。\n\n（约等于没提升）');
+                showSoftwareWindow('⚡ 网速加速器 2002', '正在搜索附近的 WiFi...');
+                let wifiStep = 0;
+                softwareTimer = setInterval(() => {
+                    wifiStep++;
+                    switch(wifiStep) {
+                        case 1:
+                            document.getElementById('swText').innerText = '找到 3 个 WiFi 信号';
+                            updateSoftwareProgress(20);
+                            break;
+                        case 2:
+                            document.getElementById('swText').innerText = '正在尝试连接邻居家的网...';
+                            updateSoftwareProgress(40);
+                            break;
+                        case 3:
+                            document.getElementById('swText').innerText = '密码错误，正在暴力破解...';
+                            updateSoftwareProgress(60);
+                            break;
+                        case 4:
+                            document.getElementById('swText').innerText = '破解成功！';
+                            updateSoftwareProgress(80);
+                            break;
+                        case 5:
+                            document.getElementById('swText').innerText = '网速已从 56K 提升到 57K';
+                            updateSoftwareProgress(100);
+                            break;
+                        case 6:
+                            clearInterval(softwareTimer);
+                            softwareTimer = null;
+                            hideSoftwareWindow();
+                            alert('⚡ 加速完成！\n\n网速从 56K 提升到 57K。\n\n（邻居已经发现，正在追你）');
+                            break;
+                    }
+                }, 1500);
                 break;
                 
             case '自动关机助手':
-                alert('⏻ 自动关机助手\n\n即将在 3 秒后关机...');
-                let countdown = 3;
-                bootTimer = setInterval(() => {
-                    countdown--;
-                    if (countdown <= 0) {
-                        clearInterval(bootTimer);
-                        bootTimer = null;
-                        closeVirtualPC();
-                    }
-                }, 1000);
+                const confirmAutoShutdown = confirm('⏻ 自动关机助手\n\n确定要关机吗？');
+                if (confirmAutoShutdown) {
+                    alert('⏻ 自动关机助手\n\n即将在 3 秒后关机...');
+                    let countdown = 3;
+                    bootTimer = setInterval(() => {
+                        countdown--;
+                        if (countdown <= 0) {
+                            clearInterval(bootTimer);
+                            bootTimer = null;
+                            closeVirtualPC();
+                        }
+                    }, 1000);
+                }
                 break;
                 
             case '内存清理大师':
-                alert('🧹 内存清理大师\n\n正在清理内存...\n\n清理完成！\n\n内存反而少了 10%。\n\n（建议卸载本软件）');
+                showSoftwareWindow('🧹 内存清理大师', '正在清理内存...');
+                let cleanProgress = 0;
+                softwareTimer = setInterval(() => {
+                    cleanProgress += 10;
+                    updateSoftwareProgress(cleanProgress);
+                    if (cleanProgress >= 100) {
+                        clearInterval(softwareTimer);
+                        softwareTimer = null;
+                        document.getElementById('swText').innerHTML = 
+                            '🧹 内存清理大师<br><br>' +
+                            '正在清理内存...<br>' +
+                            '清理完成！<br>' +
+                            '内存反而少了 10%。<br><br>' +
+                            '（建议卸载本软件）';
+                        document.getElementById('swProgressBg').style.display = 'none';
+                        document.getElementById('swPercent').style.display = 'none';
+                        softwareTimer = setTimeout(() => {
+                            hideSoftwareWindow();
+                            document.getElementById('swProgressBg').style.display = '';
+                            document.getElementById('swPercent').style.display = '';
+                            softwareTimer = null;
+                        }, 5000);
+                    }
+                }, 300);
                 break;
         }
     }
