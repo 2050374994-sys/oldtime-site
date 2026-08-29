@@ -140,18 +140,13 @@
         }
         .clickable:hover { background: #ffff00; }
         
-        .avatar-placeholder {
+        .avatar-img {
             width: 100px;
             height: 100px;
-            background: #e0e0e0;
             border: 2px solid #808080;
             margin: 0 auto 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            text-align: center;
-            color: #999;
+            display: block;
+            object-fit: cover;
         }
         
         .bottom-layout {
@@ -174,7 +169,6 @@
             display: flex;
         }
         
-        /* ========== 技能表（保留外框，去掉行边框） ========== */
         .skill-box {
             background: #fff;
             border: 2px inset #c0c0c0;
@@ -418,8 +412,8 @@
             <hr>
             
             <div class="info-box">
-                <div class="avatar-placeholder">👤</div>
-                <center><p style="font-size:11px;color:#999;">（站长头像占位，后期替换）</p></center>
+                <img src="naiwa.jpeg" alt="站长头像" class="avatar-img">
+                <center><p style="font-size:11px;color:#999;">（站长本人）</p></center>
                 <hr>
                 <p>网名：<span class="clickable" onclick="showName()">站长</span></p>
                 <p>年龄：<span class="clickable" onclick="showAge()">18岁</span></p>
@@ -633,8 +627,8 @@
     
     function showContact() {
         showPopup('📧 联系方式', `
-            <p>📧 站长邮箱：webmaster@oldtime.com</p>
-            <p>📱 站长QQ：12345678</p>
+            <p>📧 站长邮箱：2050374994@qq.com</p>
+            <p>📱 站长QQ：2050374994</p>
             <br>
             <p style="color:#cc0000;font-weight:bold;">（说好的别联系呢？你居然真的点了）</p>
         `);
