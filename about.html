@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="旧时光小站 - 关于站长">
+    <title>👤 关于站长 - 旧时光小站</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #3a6ea5;
+            font-family: "宋体", "SimSun", "Courier New", monospace;
+            font-size: 12px;
+            color: #222;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px 10px;
+            line-height: 1.8;
+        }
+        
+        .page-container {
+            width: 100%;
+            max-width: 820px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        a {
+            color: #0000EE;
+            text-decoration: underline;
+        }
+        a:visited { color: #551A8B; }
+        a:hover { color: #FF0000; background-color: #FFFF00; }
+        
+        .window {
+            width: 100%;
+            background: #c0c0c0;
+            border-top: 3px solid #ffffff;
+            border-left: 3px solid #ffffff;
+            border-right: 3px solid #404040;
+            border-bottom: 3px solid #404040;
+            padding: 2px;
+            margin: 12px 0;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.4), inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080;
+            position: relative;
+        }
+        
+        .win-title {
+            background: linear-gradient(90deg, #000080, #1084d0);
+            color: white;
+            padding: 0 10px;
+            font-weight: bold;
+            font-size: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            letter-spacing: 0.5px;
+            height: 28px;
+        }
+        
+        .win-controls { display: flex; gap: 2px; }
+        
+        .win-btn {
+            width: 16px;
+            height: 14px;
+            background: #c0c0c0;
+            border-top: 1px solid #ffffff;
+            border-left: 1px solid #ffffff;
+            border-right: 1px solid #404040;
+            border-bottom: 1px solid #404040;
+            font-size: 9px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #000;
+            font-family: Arial, sans-serif;
+            user-select: none;
+            line-height: 1;
+        }
+        .win-btn:hover { background: #d4d4d4; }
+        .win-btn:active {
+            border-top: 1px solid #404040;
+            border-left: 1px solid #404040;
+            border-right: 1px solid #ffffff;
+            border-bottom: 1px solid #ffffff;
+        }
+        
+        .win-body {
+            padding: 12px;
+            background: #d4d0c8;
+            border-top: 2px solid #808080;
+            border-left: 2px solid #808080;
+            border-right: 2px solid #ffffff;
+            border-bottom: 2px solid #ffffff;
+        }
+        
+        .nav-bar {
+            text-align: center;
+            background: #fff;
+            border: 2px outset #c0c0c0;
+            padding: 6px;
+            margin-bottom: 12px;
+            font-size: 12px;
+        }
+        .nav-bar a { margin: 0 5px; font-weight: bold; }
+        
+        .info-box {
+            background: #fff;
+            border: 2px inset #c0c0c0;
+            padding: 15px;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+        .info-box p { margin: 8px 0; }
+        .info-box h4 {
+            margin: 0 0 6px 0;
+            font-size: 13px;
+            color: #000080;
+            border-bottom: 1px dashed #c0c0c0;
+            padding-bottom: 3px;
+        }
+        
+        .clickable {
+            cursor: pointer;
+            text-decoration: underline;
+            color: #000080;
+            font-weight: bold;
+        }
+        .clickable:hover { background: #ffff00; }
+        
+        .avatar-placeholder {
+            width: 100px;
+            height: 100px;
+            background: #e0e0e0;
+            border: 2px solid #808080;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            text-align: center;
+            color: #999;
+        }
+        
+        .bottom-layout {
+            display: flex;
+            gap: 10px;
+            align-items: stretch;
+        }
+        .bottom-left {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .bottom-left .info-box:last-child {
+            margin-bottom: 0;
+        }
+        .bottom-right {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+        }
+        
+        /* ========== 技能表（保留外框，去掉行边框） ========== */
+        .skill-box {
+            background: #fff;
+            border: 2px inset #c0c0c0;
+            padding: 15px;
+            margin-bottom: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .skill-box h4 {
+            margin: 0 0 8px 0;
+            font-size: 13px;
+            color: #000080;
+            border-bottom: 1px dashed #c0c0c0;
+            padding-bottom: 3px;
+        }
+        .skill-level {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #cc0000;
+            margin-bottom: 10px;
+        }
+        .skill-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding: 6px 5px;
+            border: none;
+            background: transparent;
+        }
+        .skill-row:last-child {
+            margin-bottom: 0;
+        }
+        .skill-row:hover {
+            background: #ffffcc;
+        }
+        .skill-icon {
+            font-size: 20px;
+            margin-right: 8px;
+            flex-shrink: 0;
+            width: 30px;
+            text-align: center;
+        }
+        .skill-name {
+            width: 80px;
+            font-size: 12px;
+            flex-shrink: 0;
+            text-align: left;
+        }
+        .skill-bar-bg {
+            flex: 1;
+            background: #e0e0e0;
+            border: 1px solid #808080;
+            height: 12px;
+            margin: 0 8px;
+        }
+        .skill-bar-fill {
+            background: #000080;
+            height: 100%;
+        }
+        .skill-lv {
+            font-size: 11px;
+            color: #666;
+            flex-shrink: 0;
+            width: 40px;
+            text-align: right;
+        }
+        
+        .status-bar {
+            background: #c0c0c0;
+            border-top: 2px solid #ffffff;
+            border-left: 2px solid #ffffff;
+            border-right: 2px solid #404040;
+            border-bottom: 2px solid #404040;
+            padding: 1px 8px;
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3px;
+            line-height: 1.4;
+        }
+        
+        hr {
+            border: none;
+            border-top: 1px solid #808080;
+            border-bottom: 1px solid #ffffff;
+            height: 0;
+            margin: 12px 0;
+        }
+        
+        .footer {
+            width: 100%;
+            text-align: center;
+            font-size: 11px;
+            color: #eee;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px #000;
+        }
+        .footer a { color: #ffff00; }
+        
+        .custom-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 340px;
+            background: #c0c0c0;
+            border-top: 3px solid #ffffff;
+            border-left: 3px solid #ffffff;
+            border-right: 3px solid #404040;
+            border-bottom: 3px solid #404040;
+            padding: 2px;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.4);
+            z-index: 700;
+            display: none;
+        }
+        .custom-popup .cp-title {
+            background: linear-gradient(90deg, #000080, #1084d0);
+            color: white;
+            padding: 0 10px;
+            font-weight: bold;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 20px;
+        }
+        .custom-popup .cp-close {
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            color: #fff;
+            background: #cc0000;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .custom-popup .cp-body {
+            padding: 15px;
+            background: #fffff8;
+            border-top: 2px solid #808080;
+            border-left: 2px solid #808080;
+            border-right: 2px solid #ffffff;
+            border-bottom: 2px solid #ffffff;
+            text-align: center;
+            font-size: 13px;
+            color: #222;
+        }
+        
+        .certificate {
+            background: #fffff8;
+            border: 3px double #c0a060;
+            padding: 15px;
+            text-align: center;
+        }
+        .certificate h3 {
+            font-size: 16px;
+            color: #000080;
+            letter-spacing: 3px;
+            margin-bottom: 12px;
+        }
+        .certificate p {
+            font-size: 12px;
+            margin: 6px 0;
+            color: #333;
+        }
+        .certificate .stamp {
+            display: inline-block;
+            border: 2px solid #cc0000;
+            color: #cc0000;
+            padding: 4px 8px;
+            font-weight: bold;
+            font-size: 12px;
+            margin-top: 10px;
+            transform: rotate(-10deg);
+        }
+        
+        .progress-bar {
+            background: #c0c0c0;
+            border: 1px solid #808080;
+            height: 16px;
+            margin: 10px auto;
+            width: 80%;
+        }
+        .progress-fill {
+            background: #000080;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        @media (max-width: 700px) {
+            .bottom-layout { flex-direction: column; }
+            .bottom-right { min-height: auto; }
+        }
+        
+        @media (max-width: 600px) {
+            body { padding: 8px; }
+            .win-body { padding: 8px; }
+            .nav-bar a { display: inline-block; margin: 3px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-container">
+
+    <div class="window">
+        <div class="win-title">
+            <span>👤 <span style="color:#ffff00;">关于站长</span> - about.htm</span>
+            <span class="win-controls">
+                <span class="win-btn" onclick="location.href='index.html'" title="返回首页">×</span>
+            </span>
+        </div>
+        <div class="win-body">
+            
+            <center>
+                <marquee scrollamount="4" width="95%">
+                    👤 关于站长 👤 一个普通的站长，很普通 👤
+                </marquee>
+            </center>
+            
+            <hr>
+            
+            <div class="nav-bar">
+                <a href="index.html">🏠 首页</a> |
+                <a href="games.html">🕹️ 小游戏</a> |
+                <a href="tests.html">🧠 无聊测试</a> |
+                <a href="vote.html">🗳️ 随便投票</a> |
+                <a href="collection.html">📼 怪东西收藏</a> |
+                <a href="bullshit.html">📝 废话生成器</a> |
+                <a href="about.html">👤 关于站长</a> |
+                <a href="links.html">🔗 友情链接</a>
+            </div>
+            
+            <hr>
+            
+            <div class="info-box">
+                <div class="avatar-placeholder">👤</div>
+                <center><p style="font-size:11px;color:#999;">（站长头像占位，后期替换）</p></center>
+                <hr>
+                <p>网名：<span class="clickable" onclick="showName()">站长</span></p>
+                <p>年龄：<span class="clickable" onclick="showAge()">18岁</span></p>
+                <p>职业：<span class="clickable" onclick="showCertificate()">专业上网</span></p>
+                <p>爱好：<span class="clickable" onclick="showComputerManual()">开机、关机、重启</span></p>
+                <p>特长：<span class="clickable" onclick="showLoading()">能盯着加载中的页面看很久</span></p>
+                <p>近况：<span class="clickable" onclick="showRecent()">刚把电脑修好，又坏了</span></p>
+                <p>联系方式：<span class="clickable" onclick="showContact()">别联系，站长社恐</span></p>
+            </div>
+            
+            <div class="info-box">
+                <h4>📝 站长自我介绍</h4>
+                <p>大家好，我是站长。</p>
+                <p>这个网站是我用一台快报废的电脑建的。</p>
+                <p>建站的原因？因为电脑说它想上网。</p>
+                <p>我花了三天学会 HTML，然后花了三分钟决定做什么。</p>
+                <p>这就是你们现在看到的一切。</p>
+            </div>
+            
+            <div class="bottom-layout">
+                <div class="bottom-left">
+                    <div class="info-box">
+                        <h4>💬 网友对站长的评价</h4>
+                        <p>匿名：站长这个人，除了网站不行，其他还行。</p>
+                        <p>路人乙：我见过站长，他长得和头像一样。</p>
+                        <p>游客666：站长说自己是专业上网，我信了。</p>
+                        <p>路人丁：站长很勤劳，每天都在修电脑。</p>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h4>🌟 站长的梦想</h4>
+                        <p>🖥️ 想换一台新电脑</p>
+                        <p>📚 想学会新的网页技术</p>
+                        <p>👥 想让更多人来看这个网站</p>
+                        <p>🤝 想和电脑和平相处</p>
+                    </div>
+                </div>
+                
+                <div class="bottom-right">
+                    <div class="skill-box">
+                        <h4>🎮 站长的技能表</h4>
+                        <p class="skill-level">等级：Lv.999</p>
+                        
+                        <div class="skill-row" onclick="showSkill('修电脑')">
+                            <span class="skill-icon">💻</span>
+                            <span class="skill-name">修电脑</span>
+                            <div class="skill-bar-bg"><div class="skill-bar-fill" style="width:40%;"></div></div>
+                            <span class="skill-lv">Lv.2</span>
+                        </div>
+                        
+                        <div class="skill-row" onclick="showSkill('上网')">
+                            <span class="skill-icon">🌐</span>
+                            <span class="skill-name">上网</span>
+                            <div class="skill-bar-bg"><div class="skill-bar-fill" style="width:100%;"></div></div>
+                            <span class="skill-lv">Lv.5</span>
+                        </div>
+                        
+                        <div class="skill-row" onclick="showSkill('等待加载')">
+                            <span class="skill-icon">⏳</span>
+                            <span class="skill-name">等待加载</span>
+                            <div class="skill-bar-bg"><div class="skill-bar-fill" style="width:80%;"></div></div>
+                            <span class="skill-lv">Lv.4</span>
+                        </div>
+                        
+                        <div class="skill-row" onclick="showSkill('拆机')">
+                            <span class="skill-icon">🔧</span>
+                            <span class="skill-name">拆机</span>
+                            <div class="skill-bar-bg"><div class="skill-bar-fill" style="width:20%;"></div></div>
+                            <span class="skill-lv">Lv.1</span>
+                        </div>
+                        
+                        <div class="skill-row" onclick="showSkill('发呆')">
+                            <span class="skill-icon">😴</span>
+                            <span class="skill-name">发呆</span>
+                            <div class="skill-bar-bg"><div class="skill-bar-fill" style="width:100%;"></div></div>
+                            <span class="skill-lv">Lv.5</span>
+                        </div>
+                        
+                        <p style="text-align:center;font-size:11px;color:#999;margin-top:8px;">（点击技能查看详情）</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div class="status-bar">
+            <span>🖥️ 就绪</span>
+            <span>📶 连接速度：56Kbps</span>
+            <span>👤 关于站长</span>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>
+            © 2002 旧时光小站 All Rights Reserved<br>
+            <a href="index.html">← 返回首页</a>
+        </p>
+    </div>
+
+</div>
+
+<div class="custom-popup" id="customPopup">
+    <div class="cp-title">
+        <span id="popupTitle">提示</span>
+        <span class="cp-close" onclick="closePopup()">×</span>
+    </div>
+    <div class="cp-body" id="popupBody"></div>
+</div>
+
+<script>
+    let popupTimer = null;
+    
+    function showPopup(title, content) {
+        if (popupTimer) { clearInterval(popupTimer); popupTimer = null; }
+        document.getElementById('popupTitle').innerText = title;
+        document.getElementById('popupBody').innerHTML = content;
+        document.getElementById('customPopup').style.display = 'block';
+    }
+    
+    function closePopup() {
+        if (popupTimer) { clearInterval(popupTimer); popupTimer = null; }
+        document.getElementById('customPopup').style.display = 'none';
+    }
+    
+    function showName() {
+        showPopup('👤 网名', '<p>这个名字是我花 3 秒钟想出来的</p>');
+    }
+    
+    function showAge() {
+        const birthDate = new Date('2007-05-06');
+        const now = new Date();
+        let totalMonths = (now.getFullYear() - birthDate.getFullYear()) * 12 + (now.getMonth() - birthDate.getMonth());
+        let extraMonths = totalMonths - 18 * 12;
+        showPopup('🎂 年龄', '<p>18岁零 ' + extraMonths + ' 个月</p>');
+    }
+    
+    function showCertificate() {
+        showPopup('🖥️ 专业上网资格证', `
+            <div class="certificate">
+                <h3>专业上网资格证</h3>
+                <p>发证机构：自己给自己发的</p>
+                <p>有效期：永久（因为没人能吊销）</p>
+                <p>持证人：站长</p>
+                <p>证书编号：No.0000001</p>
+                <div class="stamp">官方认证</div>
+            </div>
+        `);
+    }
+    
+    function showComputerManual() {
+        showPopup('⏻ 站长的电脑使用说明', `
+            <p>开机：按一下</p>
+            <p>关机：按一下</p>
+            <p>重启：按两下</p>
+            <br>
+            <p style="color:#666;">（如果没反应，说明电脑坏了）</p>
+        `);
+    }
+    
+    function showLoading() {
+        showPopup('⏳ 正在加载', `
+            <p>正在加载站长特长...</p>
+            <div class="progress-bar"><div class="progress-fill" id="loadingFill"></div></div>
+            <p id="loadingText">0%</p>
+        `);
+        
+        let progress = 0;
+        popupTimer = setInterval(() => {
+            progress += 2;
+            if (progress > 100) progress = 100;
+            document.getElementById('loadingFill').style.width = progress + '%';
+            document.getElementById('loadingText').innerText = progress + '%';
+            if (progress >= 100) {
+                clearInterval(popupTimer);
+                popupTimer = null;
+                showEasterEgg();
+            }
+        }, 500);
+    }
+    
+    function showEasterEgg() {
+        showPopup('🎉 彩蛋', `
+            <p style="font-weight:bold;">🎉 彩蛋！</p>
+            <p>恭喜你盯了 25 秒加载页面！</p>
+            <br>
+            <div id="reward1" style="display:none;">
+                <p style="color:#000080;font-weight:bold;">奖励 1：获得称号【耐心之王】</p>
+            </div>
+            <div id="reward2" style="display:none;">
+                <p style="color:#000080;font-weight:bold;">奖励 2：获得道具【加载中的进度条】</p>
+            </div>
+            <div id="reward3" style="display:none;">
+                <p style="color:#000080;font-weight:bold;">奖励 3：获得技能【等待网页加载时不会暴躁】</p>
+            </div>
+            <br>
+            <p id="rewardTip" style="display:none;color:#666;">（以上奖励均无法领取）</p>
+        `);
+        
+        setTimeout(() => { document.getElementById('reward1').style.display = 'block'; }, 1000);
+        setTimeout(() => { document.getElementById('reward2').style.display = 'block'; }, 2000);
+        setTimeout(() => { document.getElementById('reward3').style.display = 'block'; }, 3000);
+        setTimeout(() => { document.getElementById('rewardTip').style.display = 'block'; }, 4000);
+    }
+    
+    function showRecent() {
+        showPopup('🖥️ 站长近况', `
+            <p>昨天：电脑坏了</p>
+            <p>今天：电脑修好了</p>
+            <p>明天：不知道，看电脑心情</p>
+        `);
+    }
+    
+    function showContact() {
+        showPopup('📧 联系方式', `
+            <p>📧 站长邮箱：webmaster@oldtime.com</p>
+            <p>📱 站长QQ：12345678</p>
+            <br>
+            <p style="color:#cc0000;font-weight:bold;">（说好的别联系呢？你居然真的点了）</p>
+        `);
+    }
+    
+    function showSkill(skill) {
+        const skills = {
+            '修电脑': '💻 修电脑 Lv.2<br><br>修一次坏两次<br>（修完比修之前更坏）',
+            '上网': '🌐 上网 Lv.5<br><br>只会打开和关闭网页<br>（刷新也算）',
+            '等待加载': '⏳ 等待加载 Lv.4<br><br>可以一动不动等半小时<br>（然后发现网线没插）',
+            '拆机': '🔧 拆机 Lv.1<br><br>拆下来装不回去<br>（零件越拆越多）',
+            '发呆': '😴 发呆 Lv.5<br><br>无师自通<br>（满级技能）'
+        };
+        showPopup('🎮 技能详情', '<p>' + skills[skill] + '</p>');
+    }
+</script>
+</body>
+</html>
