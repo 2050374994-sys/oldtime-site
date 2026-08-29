@@ -444,16 +444,13 @@
             </span>
         </div>
         <div class="win-body">
-            
             <center>
                 <marquee scrollamount="4" width="95%">
                     ✨ 欢迎光临旧时光小站 ✨ 本站已安全运行 0 天，因为昨天刚修好 ✨
                 </marquee>
                 <p id="typeText" style="min-height:24px; font-size:18px; margin:10px 0; font-weight:bold; color:#000080;"></p>
             </center>
-            
             <hr>
-            
             <div class="main-layout">
                 <div class="main-left">
                     <div class="nav-area">
@@ -535,7 +532,6 @@
                     </div>
                 </div>
             </div>
-            
             <hr>
             <p style="font-size:11px;color:#444;">⚠ 本站建议使用 IE 5.0 以上浏览器<br>⚠ 800×600 分辨率浏览效果最佳</p>
             <p style="font-size:12px;color:#444; text-align:center;">今日运势：<span id="fortune">宜上网，忌点 ×</span></p>
@@ -562,7 +558,7 @@
 
 </div>
 
-<!-- ========== 漂浮广告 ========== -->
+<!-- 漂浮广告 -->
 <div class="floating-ad" id="floatingAd" onmouseover="isHovering = true" onmouseout="isHovering = false">
     <div class="floating-ad-header" id="adHeader">
         <span id="adHeaderText">🔥 广告</span>
@@ -591,6 +587,7 @@
         <br>
         <div class="progress-bar" id="virusProgressBar" style="display:none;"><div class="progress-fill" id="virusProgressFill"></div></div>
         <p id="virusProgressText" style="font-weight:bold;display:none;text-align:center;">0%</p>
+        <p id="virusFailMsg" style="color:#cc0000;font-weight:bold;font-size:14px;display:none;text-align:center;">❌ 杀毒失败：病毒太强</p>
         <div style="text-align:center;">
             <button id="rescueBtn" onclick="rescueAll()" style="display:none;background:#ff0000;color:#ffff00;font-size:16px;padding:10px 40px;animation:blink 0.8s infinite;">救救我</button>
         </div>
@@ -732,41 +729,13 @@
 <div id="virusPopups"></div>
 
 <style>
-    @keyframes blinkRed {
-        0% { background: #ff0000; }
-        50% { background: #990000; }
-        100% { background: #ff0000; }
-    }
-    @keyframes blinkOrange {
-        0% { background: #ff6600; }
-        50% { background: #993300; }
-        100% { background: #ff6600; }
-    }
-    @keyframes blinkPink {
-        0% { background: #ff00ff; }
-        50% { background: #990099; }
-        100% { background: #ff00ff; }
-    }
-    @keyframes blinkPurple {
-        0% { background: #9900cc; }
-        50% { background: #660099; }
-        100% { background: #9900cc; }
-    }
-    @keyframes blinkGreen {
-        0% { background: #00cc00; }
-        50% { background: #006600; }
-        100% { background: #00cc00; }
-    }
-    @keyframes blinkBlue {
-        0% { background: #0066ff; }
-        50% { background: #003399; }
-        100% { background: #0066ff; }
-    }
-    @keyframes textBlink {
-        0% { opacity: 1; }
-        50% { opacity: 0.3; }
-        100% { opacity: 1; }
-    }
+    @keyframes blinkRed { 0% { background: #ff0000; } 50% { background: #990000; } 100% { background: #ff0000; } }
+    @keyframes blinkOrange { 0% { background: #ff6600; } 50% { background: #993300; } 100% { background: #ff6600; } }
+    @keyframes blinkPink { 0% { background: #ff00ff; } 50% { background: #990099; } 100% { background: #ff00ff; } }
+    @keyframes blinkPurple { 0% { background: #9900cc; } 50% { background: #660099; } 100% { background: #9900cc; } }
+    @keyframes blinkGreen { 0% { background: #00cc00; } 50% { background: #006600; } 100% { background: #00cc00; } }
+    @keyframes blinkBlue { 0% { background: #0066ff; } 50% { background: #003399; } 100% { background: #0066ff; } }
+    @keyframes textBlink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 </style>
 
 <script>
@@ -787,10 +756,7 @@
     // ========== 时钟 ==========
     function updateClock() {
         const now = new Date();
-        const timeStr = '2002-04-20 ' +
-            String(now.getHours()).padStart(2, '0') + ':' +
-            String(now.getMinutes()).padStart(2, '0') + ':' +
-            String(now.getSeconds()).padStart(2, '0');
+        const timeStr = '2002-04-20 ' + String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0') + ':' + String(now.getSeconds()).padStart(2, '0');
         document.getElementById('clock').innerText = timeStr;
     }
     setInterval(updateClock, 1000);
@@ -839,14 +805,12 @@
     function showFloatingAd() {
         const ad = ads[currentAdIndex];
         const floatingAd = document.getElementById('floatingAd');
-        
         adX = Math.floor(Math.random() * (window.innerWidth - 250));
         adY = Math.floor(Math.random() * (window.innerHeight - 200));
         if (adX < 0) adX = 0;
         if (adY < 0) adY = 0;
         adSpeedX = Math.random() > 0.5 ? 0.5 : -0.5;
         adSpeedY = Math.random() > 0.5 ? 0.5 : -0.5;
-        
         document.getElementById('adHeader').style.background = ad.headerBg;
         document.getElementById('adHeaderText').innerText = ad.headerText;
         document.getElementById('adCloseBtn').style.background = ad.closeBg;
@@ -857,11 +821,9 @@
         document.getElementById('adBtn').innerText = ad.btnText;
         document.getElementById('adBtn').style.background = ad.btnBg;
         document.getElementById('adBtn').style.color = ad.btnColor;
-        
         floatingAd.style.display = 'block';
         floatingAd.style.left = adX + 'px';
         floatingAd.style.top = adY + 'px';
-        
         if (adTimer) cancelAnimationFrame(adTimer);
         moveFloatingAd();
     }
@@ -895,7 +857,6 @@
         document.getElementById('floatingAd').style.display = 'none';
         if (adTimer) cancelAnimationFrame(adTimer);
         isAdWindowOpen = true;
-        
         switch(currentAdIndex) {
             case 0: openVirusAd(); break;
             case 1: openGameAd(); break;
@@ -923,6 +884,8 @@
         if (isVirusScanning) {
             virusCloseAttempts++;
             if (virusCloseAttempts === 1) alert('🦠 病毒正在攻击系统，无法关闭！');
+            else if (virusCloseAttempts === 2) alert('🚨 别点了，等杀完！');
+            else alert('💀 你再点病毒就赢了！');
             return;
         }
         document.getElementById('virusAdWindow').style.display = 'none';
@@ -937,6 +900,7 @@
         document.getElementById('cancelScanBtn').style.display = 'none';
         document.getElementById('virusProgressBar').style.display = 'block';
         document.getElementById('virusProgressText').style.display = 'block';
+        document.getElementById('virusFailMsg').style.display = 'none';
         virusProgress = 0;
         virusTimer = setInterval(() => {
             virusProgress += Math.floor(Math.random() * 5) + 1;
@@ -946,6 +910,8 @@
             if (virusProgress >= 99) {
                 clearInterval(virusTimer);
                 virusTimer = null;
+                document.getElementById('virusProgressFill').style.background = '#cc0000';
+                document.getElementById('virusFailMsg').style.display = 'block';
                 document.getElementById('rescueBtn').style.display = 'inline-block';
             }
         }, 300);
@@ -981,9 +947,11 @@
         document.getElementById('virusAdWindow').style.display = 'none';
         document.getElementById('virusProgressBar').style.display = 'none';
         document.getElementById('virusProgressText').style.display = 'none';
+        document.getElementById('virusFailMsg').style.display = 'none';
         document.getElementById('rescueBtn').style.display = 'none';
         document.getElementById('startScanBtn').style.display = 'inline-block';
         document.getElementById('cancelScanBtn').style.display = 'inline-block';
+        document.getElementById('virusProgressFill').style.background = '#00cc00';
         alert('弹窗已清理，但病毒还在。');
         showNextFloatingAd();
     }
@@ -1061,8 +1029,8 @@
     function startGrowHair() {
         const hairAdBody = document.getElementById('hairAdBody');
         hairAdBody.innerHTML = '<p>正在生发...</p>';
-        setTimeout(() => { hairAdBody.innerHTML = '<p>🌿 长了一根...</p><div style="font-size:30px;">🌿</div>'; }, 800);
-        setTimeout(() => { hairAdBody.innerHTML = '<p>🌿🌿 长了两根...</p><div style="font-size:30px;">🌿🌿</div>'; }, 1600);
+        setTimeout(() => { hairAdBody.innerHTML = '<p>🌱 长了一根...</p><div style="font-size:30px;">🌱</div>'; }, 800);
+        setTimeout(() => { hairAdBody.innerHTML = '<p>🌿🌱 长了两根...</p><div style="font-size:30px;">🌿🌱</div>'; }, 1600);
         setTimeout(() => { hairAdBody.innerHTML = '<p>🌿🌿🌿 长了三根！</p><div style="font-size:30px;">🌿🌿🌿</div><p>看起来不错！</p>'; }, 2400);
         setTimeout(() => { hairAdBody.innerHTML = '<p>💨 一阵风吹过...</p><p style="color:#cc0000;font-weight:bold;">头发全没了</p>'; }, 3500);
         setTimeout(() => { alert('失败！毛囊已放弃'); closeHairAd(); }, 4500);
